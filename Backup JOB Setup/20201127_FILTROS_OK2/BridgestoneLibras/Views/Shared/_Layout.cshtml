@@ -1,0 +1,214 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<META http-equiv="X-UA-Compatible" content="IE=11" />
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"] - Bridgestone Job-Setup Online</title>
+
+    <link rel="stylesheet" href="~/css/LHH.css" />
+    <link rel="stylesheet" href="~/css/simple-sidebar.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-datepicker.min.css" />
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @*<style>
+        .renova {
+            list-group-item;
+            list-group-item-action;
+            bg-gray;
+            text-gray;
+        }
+    </style>*@
+</head>
+
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Mvc;
+@using Newtonsoft.Json;
+@using BridgestoneLibras.ModelsEntity;
+
+
+
+<body>
+    <div>
+        <div class="bg-black" style="width: 100%">
+            <div class="sidebar-heading bg-black center-block item_height">
+                <table style="width:95%; align-self:center">
+                    <tr>
+                        <td width="260px"><img src="~/images/bridgestone.png" class="lhh_logo left" /></td>
+                        @*<td width="50px"><button class="btn lhh-navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse" id="menu-toggle">&#9776;</button>
+                            </td>*@
+                        <td width="50px">
+                            <button class="btn lhh-navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse" id="menu-toggle">
+                                &#9776;
+                            </button>
+                        </td>
+                        <td width="70%" class="text-capitalize text-center lhh_titulo">JOB-SETUP - ACESSO</td>
+                        <td width="14%" class="text-capitalize text-right lhh_usuario">
+                            <label class="lhh_usuario">@Context.Session.GetString("usuario")</label>
+                        </td>
+                        <td width="1%" class="text-capitalize left lhh_usuario">
+                            <input type="image" src="~/images/logout.png" onclick="location.href='@Url.Action("Login", "Home")'" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex" id="wrapper">
+        <!-- /#page-content-wrapper -->
+        <!-- Sidebar -->
+        <div class="bg-dark border-right" id="sidebar-wrapper">
+            @{
+                List<UsuarioFuncao> lPermissoes = new List<UsuarioFuncao>();
+                if (Context.Session.GetString("permissoes") != null)
+                {
+                    lPermissoes = JsonConvert.DeserializeObject<List<UsuarioFuncao>>(Context.Session.GetString("permissoes"));
+                }
+
+            }
+            <nav id="sidebar">
+                <ul class="list-unstyled components">
+                    @foreach (var permissoes in lPermissoes)
+                    {
+                        @* INICIO DO PREENCHIMENTO DO FORMULARIO *@
+                        @if (permissoes.funcao == "OPERADOR")
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "JobSetup")" class='list-group-item list-group-item-action bg-gray text-gray'>Job-Setup</a>
+                            </li>
+                        }
+
+                        @if (permissoes.funcao == "CADASTRAPERGUNTA")
+                        {
+                            @* DEPARTAMENTO*@
+                            <li class="list-group list-group-flush bg-gray active">
+                                <a href="#homeDepartamento" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-gray text-gray">Cadastros</a>
+                                <ul class="collapse list-unstyled" id="homeDepartamento">
+                                    <li>
+                                        <a href="@Url.Action("Index", "Departamento")" class='list-group-item list-group-item-action bg-gray text-gray'>Departamentos</a>
+                                        <a href="@Url.Action("Index", "Maquina")" class='list-group-item list-group-item-action bg-gray text-gray'>Maquinas</a>
+                                        <a href="@Url.Action("Index", "MaquinaParte")" class='list-group-item list-group-item-action bg-gray text-gray'>Máquinas Parte</a>
+                                        <a href="@Url.Action("Index", "Formulario")" class='list-group-item list-group-item-action bg-gray text-gray'>Formulários</a>
+                                        <a href="@Url.Action("Index", "TipoResposta")" class='list-group-item list-group-item-action bg-gray text-gray'>Tipo Resposta</a>
+                                        <a href="@Url.Action("Index", "Pergunta")" class='list-group-item list-group-item-action bg-gray text-gray'>Perguntas</a>
+                                        
+                                        
+                                    </li>
+                                    
+                                </ul>
+                            </li>
+                            
+                            @*<li class="list-group list-group-flush bg-gray">
+                                <a href="#homeMaquina" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-gray text-gray">Máquina</a>
+                                <ul class="collapse list-unstyled" id="homeMaquina">
+                                    <li>
+                            
+                                        <a href="@Url.Action("Cadastrar", "Maquina")" class='list-group-item list-group-item-action bg-gray text-gray'>Cadastro</a>
+                                    </li>
+                                    <li>
+                            
+                                        <a href="@Url.Action("index", "Maquina")" class='list-group-item list-group-item-action bg-gray text-gray'>Lista de Máquinas</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            
+                            <li class="list-group list-group-flush bg-gray">
+                                <a href="#homeParteMaquina" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-gray text-gray">Parte Máquina</a>
+                                <ul class="collapse list-unstyled" id="homeParteMaquina">
+                                    <li>
+                                        
+                                        <a href="@Url.Action("Cadastrar", "MaquinaParte")" class='list-group-item list-group-item-action bg-gray text-gray'>Cadastro</a>
+                                    </li>
+                                    <li>
+                                        
+                                        <a href="@Url.Action("index", "MaquinaParte")" class='list-group-item list-group-item-action bg-gray text-gray'>Lista das Partes das Máquinas</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            
+                            <li class="list-group list-group-flush bg-gray">
+                                <a href="#homeFormulario" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-gray text-gray">Formulário</a>
+                                <ul class="collapse list-unstyled" id="homeFormulario">
+                                    <li>
+                                        
+                                        <a href="@Url.Action("Cadastrar", "Formulario")" class='list-group-item list-group-item-action bg-gray text-gray'>Cadastro</a>
+                                    </li>
+                                    <li>
+                                        
+                                        <a href="@Url.Action("index", "Formulario")" class='list-group-item list-group-item-action bg-gray text-gray'>Lista de Formulário</a>
+                                    </li>
+                                </ul>
+                            </li>*@
+
+                            @*MENU PERGUNTA*@
+                            @*<li class="list-group list-group-flush bg-gray">
+                                <a href="#homePergunta" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-gray text-gray">Pergunta</a>
+                                <ul class="collapse list-unstyled" id="homePergunta">
+                                    <li>
+                                        
+                                    </li>
+                                    <li>
+                                        
+                                        <a href="@Url.Action("index", "Pergunta")" class='list-group-item list-group-item-action bg-gray text-gray'>Lista de Pergunta</a>
+                                    </li>
+                                </ul>
+                            </li>*@
+                        }
+
+
+                        @if (permissoes.funcao == "LIDER")
+                        {
+                            @*MENU NOTIFICACAO*@
+                            <li class="list-group list-group-flush bg-gray">
+                                <a href="#homeNotificacao" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-gray text-gray">Notificações</a>
+                                <ul class="collapse list-unstyled" id="homeNotificacao">
+                                    <li>
+                                        <a href="@Url.Action("index", "NotificacaoLider")" class='list-group-item list-group-item-action bg-gray text-gray'>Notificação Líder</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+
+                        @*<li>
+                                <a href="#">Portfolio</a>
+                            </li>
+                            <li>
+                                <a href="#">Contact</a>
+                            </li>*@
+
+                    }
+                </ul>
+
+            </nav>
+
+
+
+        </div>
+
+        <!-- /#sidebar-wrapper -->
+        <!--Page Content-->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+</body>
+</html>
+
+
+

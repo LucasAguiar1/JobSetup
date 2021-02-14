@@ -1,0 +1,142 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<META http-equiv="X-UA-Compatible" content="IE=11" />
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"] - Bridgestone Job-Setup Online</title>
+
+    <link rel="stylesheet" href="~/css/LHH.css" />
+    <link rel="stylesheet" href="~/css/simple-sidebar.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-datepicker.min.css" />
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+</head>
+
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Mvc;
+@using Newtonsoft.Json;
+@using BridgestoneLibras.ModelsEntity;
+
+
+
+<body>
+    <div>
+        <div class="bg-black" style="width: 100%">
+            <div class="sidebar-heading bg-black center-block item_height">
+                <table style="width:95%; align-self:center">
+                    <tr>
+                        <td width="260px"><img src="~/images/bridgestone.png" class="lhh_logo left" /></td>
+                        <td width="50px"><button class="btn lhh-navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse" id="menu-toggle">&#9776;</button></td>
+                        <td width="70%" class="text-capitalize text-center lhh_titulo">JOB-SETUP - ACESSO</td>
+                        <td width="14%" class="text-capitalize text-right lhh_usuario">
+                            <label class="lhh_usuario">@Context.Session.GetString("usuario")</label>
+                        </td>
+                        <td width="1%" class="text-capitalize left lhh_usuario">
+                            <input type="image" src="~/images/logout.png" onclick="location.href='@Url.Action("Login", "Home")'" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex" id="wrapper">
+        <!-- /#page-content-wrapper -->
+        <!-- Sidebar -->
+        <div class="bg-dark border-right" id="sidebar-wrapper">
+
+            @if (Context.Session.GetString("permissoes") != null)
+            {
+                //int periodoId = Convert.ToInt32(Context.Session.GetInt32("periodoId"));
+                //string periodos = Context.Session.GetString("periodos");
+
+                //List<TB_PERIODOS> lPeriodos = JsonConvert.DeserializeObject<List<TB_PERIODOS>>(periodos);
+
+                string permissoes = Context.Session.GetString("permissoes");
+
+                @Html.Raw("<div class='list-group list-group-flush bg-gray'>")
+
+                @Html.Raw("<a href = '../Departamento/Departamento' class='list-group-item list-group-item-action bg-gray text-gray'>Grid Departamento</a>")
+
+                //DEPARTAMENTO
+                @Html.Raw("<div class='list-group-item list-group-item-action bg-gray text-gray'>")
+                @Html.ActionLink("Lista Departamento", "ViewDepartamento", "Departamento")
+                @Html.Raw("</div>")
+
+                //MENU MAQUINA
+                @Html.Raw("<div class='list-group-item list-group-item-action bg-gray text-gray'>")
+                @Html.ActionLink("Lista Máquina", "Index", "Maquina")
+                @Html.Raw("</div>")
+
+                //MENU MAQUINA PARTE
+                @Html.Raw("<div class='list-group-item list-group-item-action bg-gray text-gray'>")
+                @Html.ActionLink("Lista Máquina Parte", "Index", "MaquinaParte")
+                @Html.Raw("</div>")
+
+                //MENU Formulario
+                @Html.Raw("<div class='list-group-item list-group-item-action bg-gray text-gray'>")
+                @Html.ActionLink("Lista de Formulario", "Index", "Formulario")
+                @Html.Raw("</div>")
+
+                //MENU Pergunta
+                @Html.Raw("<div class='list-group-item list-group-item-action bg-gray text-gray'>")
+                @Html.ActionLink("Lista Perguntas", "Index", "Pergunta")
+                @Html.Raw("</div>")
+
+
+                @Html.ActionLink("Notificações", "Index", "NotificacaoLider", null, new { @class = "list-group-item list-group-item-action bg-gray text-gray" })
+
+                @Html.Raw("<a href = 'http://10.176.80.47/reports/browse/PRODUTIVIDADE' class='list-group-item list-group-item-action bg-gray text-gray' target='_blank'>Relatórios</a>")
+
+                @Html.Raw("</div>")
+                
+            }
+        </div>
+
+        <!-- /#sidebar-wrapper -->
+        <!--Page Content-->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <script>
+      $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+      });
+
+//To get selected value an text of dropdownlist
+        @*function TrocarPeriodo(oSelect) {
+        var periodoId = oSelect.value;
+
+        $.ajax({
+            url: '@Url.Action("TrocarPeriodo", "Home")' + '?id=' + periodoId,
+            type: 'POST',
+            contentType: 'application/json',
+            success: function (data) {
+                window.location.reload();
+            },
+            complete: function (data) {
+            }
+        });
+    }*@
+
+    </script>
+</body>
+</html>
+
+
+

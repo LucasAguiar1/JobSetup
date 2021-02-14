@@ -1,0 +1,72 @@
+﻿@model IEnumerable<BridgestoneLibras.Models.MensagemModel>
+@{
+    ViewData["Title"] = "Importação";
+}
+
+<ul class="breadcrumb">
+    <li><a href="@Url.Action("Contrato", "Servico")" class="cor-bridge">Serviços Contratados</a></li>
+    <li>&nbsp;/&nbsp;Importação</li>
+</ul>
+
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<form method="post" enctype="multipart/form-data" asp-controller="Servico" asp-action="ContratoImporta">
+    <div class="form-group">
+        <table id="tblArquivo" class="tab-right">
+            <tr><td width="60%"></td>
+                <td><div class="input-group right-addon">
+                        <span class="input-group-btn">
+                            <button id="fake-file-button-browse" type="button" class="btn btn-default" @ViewBag.AcaoControleImporta>
+                                <span class="glyphicon glyphicon-file"></span>
+                            </button>
+                        </span>
+                        <input type="file" id="files" name="files" style="display:none">
+                        <input type="text" id="fake-file-input-name" disabled="disabled" placeholder="Selecionar arquivo..." class="form-control">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default" disabled="disabled" id="fake-file-button-upload">
+                                <span class="glyphicon glyphicon-cloud-upload"></span>
+                            </button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>
+
+<br />
+<script type="text/javascript">
+    // Fake file upload
+    document.getElementById('fake-file-button-browse').addEventListener('click', function () {
+        document.getElementById('files').click();
+    });
+
+    document.getElementById('files').addEventListener('change', function () {
+        document.getElementById('fake-file-input-name').value = this.value;
+
+        document.getElementById('fake-file-button-upload').removeAttribute('disabled');
+    });
+</script>
+
+<div class="divTabela">
+    <table id="tblValidacao" class="table tab-cons table-bordered">
+        <thead>
+            <tr class="tab-cons-row">
+                <th class="left tab-th-font">
+                    @Html.DisplayNameFor(model => model.Mensagem)
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tblContratoConteudo">
+            @foreach (var item in Model)
+            {
+                <tr class="tab-cons-row">
+                    <td class="left">
+                        @Html.DisplayFor(modelItem => item.Mensagem)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

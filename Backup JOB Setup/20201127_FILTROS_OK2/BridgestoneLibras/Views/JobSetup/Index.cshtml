@@ -1,0 +1,539 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Departamento</title>
+</head>
+<body>
+
+    <div id="MenuLI"></div>
+    <div class="container">
+        <div id="formulario"></div>
+        <div id="conteudo"></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalmsn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Informação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="idmsn"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin:auto; background-color: black;">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+</html>
+
+<script>
+
+
+    var pnl = "";
+    var menuVoltar = "";
+    Menu = "Departamentos";
+    var idMaquina = 0;
+    var formulario = 0;
+    var departamento = 0;
+    var partemaquina = 0;
+    var html = "";
+    dadosRetorno = new Array();
+    var cont = 0;
+    (function () {
+        Departamentos();
+        MontarLI_Menu("Departamentos");
+    })();
+
+
+    function DefiniePainel(id, pnl) {
+
+        switch (pnl) {
+            case "Departamentos":
+                Departamentos();
+                MontarLI_Menu("Departamentos");
+                break;
+            case "Maquinas":
+                Maquinas(id.id, 0);
+                departamento = id.id;
+                MontarLI_Menu("Maquinas");
+                break;
+            case "MaquinasParte":
+                MaquinasParte(id.id,0);
+                idMaquina = id.id;
+                
+                MontarLI_Menu("MaquinasParte");
+                break;
+            case "Formulario":
+                Formulario(id.id, 0);
+                
+                MontarLI_Menu("Formulario");
+                break;
+            case "Perguntas":
+                Perguntas(id.id, 0);
+                formulario = id.id
+                
+                MontarLI_Menu("Perguntas");
+                break;
+            default:
+        }
+    }
+
+    function Departamentos() {
+       
+        $.ajax({
+            url: "Departamentos/JobSetup",
+            dataType: 'json',
+            type: 'GET',
+            success: function (data) {
+                if (data.length == 0) {
+                    var msn = "Não exitem Departamentos.";
+                    ModalAlert(msn)
+
+                } else {
+                    MontaPainel(data);
+                    menuVoltar = "Departamentos";
+                    pnl = "Maquinas";
+                }
+            }
+        });
+    }
+
+    function Maquinas(id, flag) {
+        $.ajax({
+            url: "Maquinas/JobSetup?idDepartamento=" + id,
+            dataType: 'json',
+            type: 'GET',
+            success: function (data) {
+                if (data.length == 0) {
+                    var msn = "Não exite(m) máquina(s) para esse Departamento.";
+                    ModalAlert(msn)
+                    return;
+
+                } else {
+                    MontaPainel(data);
+                }
+                if (data.length > 0) {
+                    if (flag == 0) {
+                        menuVoltar = "Maquinas";
+                        pnl = "MaquinasParte";
+                    }
+                }
+            }
+        });
+    }
+
+    function MaquinasParte(id, flag) {
+        $.ajax({
+            url: "MaquinasParte/JobSetup?idMaquina=" + id,
+            dataType: 'json',
+            type: 'GET',
+            success: function (data) {
+
+                if (data.length == 0) {
+                    var msn = "Não exite(m) Parte Máquina(s) para essa Máquina.";
+                    ModalAlert(msn)
+                    return;
+
+                } else {
+                    MontaPainel(data);
+                }
+
+                if (data.length > 0) {
+                    if (flag == 0) {
+                        menuVoltar = "MaquinasParte";
+                        pnl = "Formulario";
+                    }
+                }
+            }
+        });
+    }
+
+    function Formulario(id, flag) {
+
+        $.ajax({
+            url: "Formularios/JobSetup?idMaquinaParte=" + id,
+            dataType: 'json',
+            type: 'GET',
+            success: function (data) {
+                if (data.length == 0) {
+                    var msn = "Não exite(m) Formulário(s) para essa Parte Máquina.";
+
+                    ModalAlert(msn)
+                    return;
+
+                } else {
+                    MontaPainel(data);
+                    if (flag == 0) {
+                        menuVoltar = "Formulario";
+                        pnl = "Perguntas";
+                    }
+                }
+            }
+        });
+    }
+
+    function Perguntas(id, flag) {
+
+        $.ajax({
+            url: "Perguntas/JobSetup?idFormulario=" + id,
+            dataType: 'json',
+            type: 'GET',
+            success: function (data) {
+                if (data.length == 0) {
+                    var msn = "Não exite(m) Pergunta(s) cadastrada(s) para esse Formulário.";
+                    ModalAlert(msn)
+                    return;
+                } else {
+                    montaFormulario(data);
+                    $("#conteudo").empty();
+                    if (flag == 0) {
+                        menuVoltar = "Perguntas";
+                        pnl = "Perguntas";
+                    }
+                }
+            }
+        });
+
+    }
+
+    function MontarLI_Menu(menu) {
+        var html = "";
+        
+        $("#MenuLI").empty();
+        if (menu != "Departamentos") {
+            html += "<button type='button' class='btn btn-link' onclick='Voltar();' >(" + menu + " ) Voltar</button>";
+        } else {
+            html += "<button type='button' class='btn btn-btn'>" + menu +"</button > ";
+        }
+        $("#MenuLI").append(html);
+    }
+
+    function montaFormulario(dados) {
+
+        html = "";
+        $("#formulario").empty();
+
+        var contador = 0;
+
+        for (var i = 0; i < dados.length; i++) {
+            if (contador == 0) {
+                html += "<div class='row text-center' style='margin-top:20px;'>";
+                html += "<div class='col-lg-12'>";
+                html += "<h4><label>" + dados[i].nomeFormulario + "</label></h4>";
+                html += "</div>";
+                html += "</div>";
+            }
+            contador++;
+            //Texto
+            if (dados[i].id_tipoResposta == 7) {
+                Text(dados[i].nome, dados[i].id);
+            }
+            //Número
+            if (dados[i].id_tipoResposta == 8) {
+                Numero(dados[i].nome, dados[i].id);
+            }
+            if (dados[i].id_tipoResposta == 5) {
+                Alternativas(dados, i);
+            }
+            if (dados[i].id_tipoResposta == 6) {
+                Condicao(dados, i);
+            }
+        }
+
+        html += "<div class='row' style='margin-top:10px'>";
+        html += "<div class='col-lg-3'>";
+        html += "<button type='button' id='btnAlterar' onclick='Salvar()' class='btn btn-outline-danger btn-block'>Salvar</button>";
+        html += "</div>";
+        html += "<div class='col-lg-3'>";
+        html += "<button type='button' id='btnAlterar' onclick='Salvar()' class='btn btn-outline-danger btn-block'>Notificar Líder</button>";
+        html += "</div>";
+        html += "<div class='col-lg-3'>";
+        html += "<button type='button' id='btnAlterar' onclick='Voltar()' class='btn btn-outline-dark  btn-block'>Voltar</button>";
+        html += "</div>";
+        html += "<div class='col-lg-3'>";
+        html += "<button type='button' id='btnAlterar' onclick='Limpar()' class='btn btn-outline-dark  btn-block'>Finalizar</button>";
+        html += "</div>";
+        
+        html += "</div>";
+
+        $("#formulario").append(html);
+        DesabilitaCampos();
+    }
+
+    function Salvar() {
+        var dataToSend = {
+            list: [{ fieldname: 'ABC' }, { fieldname: 'DEF' }]
+        };
+
+        $.ajax({
+            url: 'RespostaPergunta/JobSetup',
+            type: 'POST',
+            dataType: "json",
+            data: dataToSend,
+            success: function (response) {
+                $("#dvtest").html(response);
+            }
+        });
+    }
+
+    function Voltar() {
+        
+        $("#formulario").empty();
+        if (menuVoltar == "Perguntas") {
+            menuVoltar = "Formulario";
+            MontarLI_Menu(menuVoltar);
+            Formulario(formulario, 1);
+            return;
+        }
+        if (menuVoltar == "Formulario") {
+            menuVoltar = "MaquinasParte";
+            MontarLI_Menu(menuVoltar);
+            MaquinasParte(idMaquina,1);
+            return;
+        }
+
+        if (menuVoltar == "MaquinasParte") {
+            menuVoltar = "Maquinas";
+            MontarLI_Menu(menuVoltar);
+            Maquinas(departamento,1);
+            return;
+        }
+        if (menuVoltar == "Maquinas") {
+            menuVoltar = "Departamentos";
+            MontarLI_Menu("Departamentos");
+            Departamentos();
+            return;
+        }
+    }
+
+    function Text(nome, id) {
+        html += "<div class='row text-left' style='margin-top:10px;'>";
+        html += "<div class='col-lg-4'>";
+        html += "<label>" + nome + "</label>";
+        html += "</div>";
+        html += "<div class='col-lg-8'>";
+        html += "<input type='text' maxlength='50' id=" + id + " name=" + nome + " class='form-control'/>";
+        html += "</div>";
+        html += "</div>";
+
+    }
+
+    function Numero(nome, id) {
+        html += "<div class='row text-left' style='margin-top:10px;'>";
+        html += "<div class='col-lg-4'>";
+        html += "<label>" + nome + "</label>";
+        html += "</div>";
+        html += "<div class='col-lg-8'>";
+        html += "<input type='text' onkeypress='ValidaNumeros(this);'  maxlength='50' id=" + id + " name=" + nome + " class='form-control'/>";
+        html += "</div>";
+        html += "</div>";
+
+    }
+
+    function Alternativas(dados, i) {
+        html += "<div class='row text-left' style='margin-top:10px;'>";
+        html += "<div class='col-lg-4'>";
+        html += "<label>" + dados[i].nome + "</label>";
+        html += "</div>";
+        html += "<div class='col-lg-8'>";
+        html += "<select id=lst" + dados[i].id + " name=" + dados[i].id + " class='form-control'>";
+
+        if (dados[i].listDescricaoMultiplaEscolha.length > 0) {
+            for (var f = 0; f < dados[i].listDescricaoMultiplaEscolha.length; f++) {
+                html += "<option value=" + dados[i].listDescricaoMultiplaEscolha[f].id + ">" + dados[i].listDescricaoMultiplaEscolha[f].nome + "</option>";
+            }
+        }
+        html += "</select >";
+        html += "</div>";
+        html += "</div>";
+    }
+
+    function Condicao(dados, i) {
+        html += "<div class='row text-left' style='margin-top:10px;'>";
+        html += "<div class='col-lg-1'>";
+        html += "<input type='checkbox' id=" + dados[i].id + " name=" + dados[i].id + " value=" + dados[i].id + " onchange='HabilitaDesabilitaCampos(this)' >";
+        html += "</div>";
+        html += "<div class='col-lg-11'>";
+        html += "<label style='margin-left:-69px;'  for=" + dados[i].id + "> " + dados[i].nome + "</label><br>";
+        html += "</div>";
+        html += "</div>";
+
+        if (dados[i].listFilhos.length > 0) {
+
+            for (var x = 0; x < dados[i].listFilhos.length; x++) {
+
+                if (dados[i].listFilhos[x].id_tipoResposta == 5) //Alternativa
+                {
+                    if (cont != 0) {
+                        cont++;
+                    }
+
+                    html += "<div class='row text-left' style='margin-top:10px;'>";
+                    html += "<div class='col-lg-4'>";
+                    html += "<label id=lbl" + dados[i].id + "f" + cont + ">" + dados[i].listFilhos[x].nome + "</label>";
+                    html += "</div>";
+                    MontaArrayDesabilitaCampos("L", dados[i].id + "f" + cont, dados[i].listFilhos[x].id_tipoResposta, cont, dados[i].id);
+
+                    cont++;
+                    html += "<div class='col-lg-8'>";
+                    html += "<select id=lst" + dados[i].id + "f" + cont + " name=" + dados[i].id + " class='form-control'>";
+
+
+                    for (var t = 0; t < dados[i].listFilhos[x].listDescricaoMultiplaEscolha.length; t++) {
+                        html += "<option value=" + dados[i].listFilhos[x].listDescricaoMultiplaEscolha[t].id + ">" + dados[i].listFilhos[x].listDescricaoMultiplaEscolha[t].nome + "</option>";
+                    }
+
+                    MontaArrayDesabilitaCampos("O", dados[i].id + "f" + cont, dados[i].listFilhos[x].id_tipoResposta, cont, dados[i].id);
+                    html += "</select >";
+                    html += "</div>";
+                    html += "</div>";
+                }
+
+
+                if (dados[i].listFilhos[x].id_tipoResposta == 8) //número
+                {
+                    cont++;
+                    MontaArrayDesabilitaCampos("L", dados[i].id + "f" + cont, dados[i].listFilhos[x].id_tipoResposta, cont, dados[i].id);
+                    html += "<div class='row text-left' style='margin-top:10px;'>";
+                    html += "<div class='col-lg-4'>";
+                    html += "<label id =lbl" + dados[i].id + "f" + cont + ">" + dados[i].listFilhos[x].nome + "</label>";
+                    html += "</div>";
+                    cont++;
+                    MontaArrayDesabilitaCampos("O", dados[i].id + "f" + cont, dados[i].listFilhos[x].id_tipoResposta, cont, dados[i].id);
+                    html += "<div class='col-lg-8'>";
+                    html += "<input type='text' maxlength='50'  onkeypress='ValidaNumeros(this);'  id=txtnNum" + dados[i].id + "f" + cont + " name=" + dados[i].id + " class='form-control'/>";
+                    html += "</div>";
+                    html += "</div>";
+                }
+
+                if (dados[i].listFilhos[x].id_tipoResposta == 7) //Text
+                {
+                    cont++;
+                    MontaArrayDesabilitaCampos("L", dados[i].id + "f" + cont, dados[i].listFilhos[x].id_tipoResposta, cont, dados[i].id);
+                    html += "<div class='row text-left' style='margin-top:10px;'>";
+                    html += "<div class='col-lg-4'>";
+                    html += "<label id =lbl" + dados[i].id + "f" + cont + ">" + dados[i].listFilhos[x].nome + "</label>";
+                    html += "</div>";
+                    cont++;
+                    MontaArrayDesabilitaCampos("O", dados[i].id + "f" + cont, dados[i].listFilhos[x].id_tipoResposta, cont, dados[i].id);
+                    html += "<div class='col-lg-8'>";
+                    html += "<input type='text' maxlength='50' id=txt" + dados[i].id + "f" + cont + " name=" + dados[i].id + " class='form-control'/>";
+                    html += "</div>";
+                    html += "</div>";
+                }
+            }
+
+        }
+
+    }
+
+    function MontaArrayDesabilitaCampos(componente, id, tipoResposta, cont, nome) {
+
+        b = new Object();
+        if (tipoResposta == 5) {
+            if (componente == "L") {
+                b["id"] = "lbl" + id;
+            } else {
+                b["id"] = "lst" + id;
+            }
+        }
+        if (tipoResposta == 8) {
+            if (componente == "L") {
+                b["id"] = "lbl" + id;
+            } else {
+                b["id"] = "txtnNum" + id;
+            }
+        }
+        if (tipoResposta == 7) {
+            if (componente == "L") {
+
+                b["id"] = "lbl" + id;
+            } else {
+                b["id"] = "txt" + id;
+            }
+        }
+        b["nome"] = nome;
+        dadosRetorno[cont] = b;
+    }
+
+    function DesabilitaCampos() {
+
+        for (var i = 0; i < dadosRetorno.length; i++) {
+            $("#" + dadosRetorno[i].id).hide();
+
+        }
+    }
+
+    function HabilitaDesabilitaCampos(id) {
+
+        if ($("#" + id.id).is(":checked")) {
+            for (var i = 0; i < dadosRetorno.length; i++) {
+                if (dadosRetorno[i].nome == id.id) {
+                    $("#" + dadosRetorno[i].id).show();
+                }
+            }
+        } else {
+            for (var i = 0; i < dadosRetorno.length; i++) {
+                if (dadosRetorno[i].nome == id.id) {
+                    $("#" + dadosRetorno[i].id).hide();
+                }
+            }
+        }
+    }
+
+    function ValidaNumeros(x) {
+
+        $(x).val($(x).val().replace(/[^0-9\.]/g, ''));
+        if ((event.which != 46 || $(x).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    }
+
+    function MontaPainel(dados) {
+        var quantidade = 0;
+        var cont = 0;
+        var html = "";
+        if (dados.length > 0) {
+            quantidade = dados.length / 3;
+        }
+        $("#conteudo").empty();
+
+        for (var i = 0; i <= quantidade; i++) {
+            html += "<div class='row'>";
+
+            for (var j = 0; j < 4; j++) {
+
+                if (cont <= dados.length - 1) {
+                    html += "<div class='col-lg-3 text-center' style='margin-top:21px;'>";
+                    html += "<button type='button'  style='width:100%; height:155px; value=" + dados[cont].id + " id='btnPainel" + dados[cont].id + "   onclick='DefiniePainel(this,pnl)' padding:14px 20px; font-size:22px; border-radius: 10px;' id=" + dados[cont].id + " class='btn btn-outline-danger'>" + dados[cont].nome + "</button>";
+                    html += "</div>";
+                    cont++;
+                }
+            }
+
+            html += " </div>";
+        }
+        
+
+        $("#conteudo").append(html);
+    }
+
+    function ModalAlert(msn) {
+        $("#modalmsn").modal('show');
+        var resposta = '';
+        $("#idmsn").empty();
+        resposta = "<div class='alert alert-danger  text-center' role='alert'>" + msn + "</div>";
+        $("#idmsn").append(resposta);
+    }
+</script>
+

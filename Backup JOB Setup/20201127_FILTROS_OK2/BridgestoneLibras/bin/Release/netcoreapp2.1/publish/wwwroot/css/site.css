@@ -1,0 +1,98 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
+for details on configuring this project to bundle and minify static web assets. */
+/*body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}*/
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+/*.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}*/
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.font-11 {
+    font-size: 11px;
+    padding-left: 10px;
+    vertical-align:bottom;
+    align-self: center;
+}
+
+.item_height {
+    padding-top:5px;
+    min-height: 65px;
+    max-height: 65px;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+.lhh-navbar-toggler {
+    font-size: 30px;
+    padding: .25rem .75rem;
+    line-height: 1;
+    background-color: transparent;
+    text-decoration: none;
+    border: none;
+    color: #fff !important;
+}
+
+.lhh-navbar-toggler:focus, .lhh-navbar-toggler:hover {
+    text-decoration: none;
+    border: none;
+}
+
+.lhh_logo {
+    max-width: 200px;
+    min-width: 200px;
+    height: auto; 
+    align-self:center; 
+    align-items:center;
+}
+
+.lhh_icon {
+    max-width: 40px;
+    min-width: 40px;
+    height: auto;
+    align-self: center;
+    align-items: center;
+}
+
+.lhh_titulo{
+    color: #9d2a2a;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.25rem;
+}
+
+.lhh_usuario {
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.75rem;
+}
+
+.lhh-txt-periodo {
+    color: #dcdcdc !important;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 20px;
+}
+
+
+
+
+
+

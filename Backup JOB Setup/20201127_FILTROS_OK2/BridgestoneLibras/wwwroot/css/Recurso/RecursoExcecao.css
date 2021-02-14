@@ -1,0 +1,12 @@
+﻿
+.divTabelaExcecoes {
+    width: 50%;
+    overflow-y: auto;
+    margin: 0px auto;
+}
+
+.campoBotaoNovoExececoes {
+    
+    margin-bottom: 20px;
+    margin-right: 0px;
+}

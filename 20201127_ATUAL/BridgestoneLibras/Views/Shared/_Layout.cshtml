@@ -1,0 +1,196 @@
+﻿
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<META http-equiv="X-UA-Compatible" content="IE=11" />
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"] - Bridgestone Job-Setup Online</title>
+
+    <link rel="stylesheet" href="~/css/LHH.css" />
+    <link rel="stylesheet" href="~/css/simple-sidebar.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-datepicker.min.css" />
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @*<style>
+            .renova {
+                list-group-item;
+                list-group-item-action;
+                bg-gray;
+                text-gray;
+            }
+        </style>*@
+</head>
+
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Mvc;
+@using Newtonsoft.Json;
+@using BridgestoneLibras.ModelsEntity;
+
+
+
+<body>
+    <div>
+        <div class="bg-black" style="width: 100%">
+            <div class="sidebar-heading bg-black center-block item_height">
+                <table style="width:95%; align-self:center">
+                    <tr>
+                        <td width="260px"><img src="~/images/bridgestone.png" class="lhh_logo left" /></td>
+                        <td width="50px">
+                            <button class="btn lhh-navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse" id="menu-toggle">
+                                &#9776;
+                            </button>
+                        </td>
+                        <td width="70%" class="text-capitalize text-center lhh_titulo">JOB-SETUP - ACESSO</td>
+                        <td width="14%" class="text-capitalize text-right lhh_usuario">
+                            <label class="lhh_usuario">@Context.Session.GetString("usuario")</label>
+                        </td>
+                        <td width="1%" class="text-capitalize left lhh_usuario">
+                            <input type="image" src="~/images/logout.png" onclick="location.href='@Url.Action("Login", "Home")'" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex" id="wrapper">
+        <!-- /#page-content-wrapper -->
+        <!-- Sidebar -->
+        <div class="bg-dark border-right" id="sidebar-wrapper">
+            @*FUNCÇÃO QA         CÓDIGOS(CADASTRAPERGUNTA)
+                FUNCÇÃO OPERADOR   CÓDIGOS(OPERADOR)
+                FUNCÇÃO LIDER      CÓDIGOS(LIDER)*@
+
+            @{
+                UsuarioFuncao lPermissoes = new UsuarioFuncao();
+                //List<UsuarioFuncao> lPermissoes = new List<UsuarioFuncao>();
+                if (Context.Session.GetString("permissoes") != null)
+                {
+
+                    //lPermissoes = JsonConvert.DeserializeObject<UsuarioFuncao>(Context.Session.GetString("permissoes"));
+                }
+
+            }
+            <nav id="sidebar">
+                <ul class="list-unstyled components">
+
+                    @if (Context.Session.GetString("permissoes") != null)
+                    {
+
+                        @*@foreach (var permissoes in lPermissoes)
+                            {*@
+
+                        @if (Context.Session.GetString("permissoes") == "OPERADOR")
+                        {
+
+                            <li class="list-group list-group-flush bg-gray">
+                                <a href="#ResponderJobSetup" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-gray text-gray">Responder Fomulários</a>
+                                <ul class="collapse list-unstyled" id="ResponderJobSetup">
+                                    <li>
+                                        <a href="@Url.Action("Index", "JobSetup")" class='list-group-item list-group-item-action bg-gray text-gray'>Job-Setup</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+                        @if (Context.Session.GetString("permissoes") == "CADASTRAPERGUNTA")
+                        {
+
+                            <li class="list-group list-group-flush bg-gray active">
+                                <a href="#homeDepartamento" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-gray text-gray">Cadastros</a>
+                                <ul class="collapse list-unstyled" id="homeDepartamento">
+                                    <li>
+                                        <a href="@Url.Action("Index", "Departamento")" class='list-group-item list-group-item-action bg-gray text-gray'>Departamentos</a>
+                                        <a href="@Url.Action("Index", "Maquina")" class='list-group-item list-group-item-action bg-gray text-gray'>Maquinas</a>
+                                        <a href="@Url.Action("Index", "MaquinaParte")" class='list-group-item list-group-item-action bg-gray text-gray'>Máquinas Parte</a>
+                                        <a href="@Url.Action("Index", "Formulario")" class='list-group-item list-group-item-action bg-gray text-gray'>Formulários</a>
+                                        <a href="@Url.Action("Index", "TipoResposta")" class='list-group-item list-group-item-action bg-gray text-gray'>Alternativas</a>
+                                        <a href="@Url.Action("Index", "Pergunta")" class='list-group-item list-group-item-action bg-gray text-gray'>Perguntas</a>
+                                        @*<a href="@Url.Action("Index", "Pergunta")" class='list-group-item list-group-item-action bg-gray text-gray'>Perguntas</a>
+                                            <a href="@Url.Action("Index", "Respostas")" class='list-group-item list-group-item-action bg-gray text-gray'>Consulta Respostas</a>
+                                            <a href="@Url.Action("index", "NotificacaoLider")" class='list-group-item list-group-item-action bg-gray text-gray'>Notificação Líder</a>*@
+
+
+                                    </li>
+
+                                </ul>
+                            </li>
+
+
+                            <li class="list-group list-group-flush bg-gray active">
+                                <a href="#homeConsultas" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-gray text-gray">Consultas</a>
+                                <ul class="collapse list-unstyled" id="homeConsultas">
+                                    <li>
+
+                                        <a href="@Url.Action("Index", "Respostas")" class='list-group-item list-group-item-action bg-gray text-gray'>Consulta Respostas</a>
+                                        <a href="@Url.Action("index", "NotificacaoLider")" class='list-group-item list-group-item-action bg-gray text-gray'>Notificação Líder</a>
+
+
+                                    </li>
+
+                                </ul>
+                            </li>
+
+
+                        }
+
+
+                        @if (Context.Session.GetString("permissoes") == "LIDER")
+                        {
+
+                            <li class="list-group list-group-flush bg-gray">
+                                <a href="#homeNotificacao" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-gray text-gray">Notificações</a>
+                                <ul class="collapse list-unstyled" id="homeNotificacao">
+                                    <li>
+                                        <a href="@Url.Action("index", "NotificacaoLider")" class='list-group-item list-group-item-action bg-gray text-gray'>Notificação Líder</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="list-group list-group-flush bg-gray">
+                                <a href="#ConsultaRespostas" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-gray text-gray">Consulta</a>
+                                <ul class="collapse list-unstyled" id="ConsultaRespostas">
+                                    <li>
+                                        <a href="@Url.Action("Index", "Respostas")" class='list-group-item list-group-item-action bg-gray text-gray'>Consulta Respostas</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="list-group list-group-flush bg-gray">
+                                <a href="#ResponderJobSetup" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-gray text-gray">JobSetup</a>
+                                <ul class="collapse list-unstyled" id="ResponderJobSetup">
+                                    <li>
+                                        <a href="@Url.Action("Index", "JobSetup")" class='list-group-item list-group-item-action bg-gray text-gray'>JobSetup</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                    }
+                </ul>
+
+            </nav>
+        </div>
+
+        <!-- /#sidebar-wrapper -->
+        <!--Page Content-->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+</body>
+</html>
+
+
+

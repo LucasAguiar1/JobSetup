@@ -1,0 +1,513 @@
+﻿@model BridgestoneLibras.Models.ContratoModel
+@{
+    ViewData["Title"] = "ContratoDetalhe";
+}
+
+<ul class="breadcrumb">
+    <li><a href="@Url.Action("Contrato", "Servico")" class="cor-bridge">Serviços Contratados</a></li>
+    <li>&nbsp;/&nbsp;Contrato Detalhes</li>
+</ul>
+
+@using (Html.BeginForm("ContratoDetalhe", "Servico", FormMethod.Post))
+{
+    <div class="divTabela">
+        <table id="tblContrato" class="table tabelaRecurso table-bordered">
+            <thead>
+                <tr class="tab-th-font">
+                    <th class="col-500 cor-bridge tab-th-font">
+                        @Html.DisplayNameFor(model => model.Descricao)
+                    </th>
+                    <th class="col-center col-100 tab-th-font">
+                        @Html.DisplayNameFor(model => model.Contrato)
+                    </th>
+                    <th class="col-center col-100">
+                        @Html.DisplayNameFor(model => model.Competencia)
+                    </th>
+                    <th class="col-center col-100">
+                        @Html.DisplayNameFor(model => model.ContratoData)
+                    </th>
+                    <th class="col-center col-100">
+                        @Html.DisplayNameFor(model => model.Valor)
+                    </th>
+                    <th class="col-center col-100">
+                        @Html.DisplayNameFor(model => model.Conferido)
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tblContratoConteudo">
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.Descricao)
+                    </td>
+                    <td class="col-center">
+                        @Html.DisplayFor(model => model.Contrato)
+                    </td>
+                    <td class="col-center">
+                        @Html.DisplayFor(model => model.Competencia)
+                    </td>
+                    <td class="col-center">
+                        @Html.DisplayFor(model => model.ContratoData)
+                    </td>
+                    <td class="col-center">
+                        @Html.DisplayFor(model => model.Valor)
+                    </td>
+                    <td class="col-center">
+                        <i class="glyphicon glyphicon-ok" @(Model.Conferido == true ? "" : "hidden")></i>
+                        <i class="glyphicon glyphicon-remove" @(Model.Conferido == false ? "" : "hidden")></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br />
+    <div class="divTabela" style="max-height:280px;">
+        <table id="tblContratoCC" class="table tabelaRecurso table-bordered">
+            <thead>
+                <tr class="tab-th-font">
+                    <th class="col-100 cor-bridge tab-th-font">
+                        @Html.DisplayNameFor(model => model.ContratoItemModel.CentroCusto)
+                    </th>
+                    <th class="col-center col-50 tab-th-font">
+                        @Html.DisplayNameFor(model => model.ContratoItemModel.CentroCustoExterno)
+                    </th>
+                    <th class="col-center col-200">
+                        @Html.DisplayNameFor(model => model.ContratoItemModel.TextoPedido)
+                    </th>
+                    <th class="col-center col-50">
+                        @Html.DisplayNameFor(model => model.ContratoItemModel.Documento)
+                    </th>
+                    <th class="col-center col-50">
+                        @Html.DisplayNameFor(model => model.ContratoItemModel.Lancamento)
+                    </th>
+                    <th class="col-center col-50">
+                        @Html.DisplayNameFor(model => model.ContratoItemModel.NumeroEntrada)
+                    </th>
+                    <th class="col-center col-50">
+                        @Html.DisplayNameFor(model => model.ContratoItemModel.Percentual)
+                    </th>
+                    <th class="col-center col-50">
+                        @Html.DisplayNameFor(model => model.ContratoItemModel.ValorEntrada)
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tblContratoConteudo">
+                @foreach (var item in Model.ListaContratoItemModel)
+                {
+                    <tr id="@Html.DisplayFor(modelItem => item.ID)">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CodigoCentroCusto)&nbsp;-&nbsp;@Html.DisplayFor(modelItem => item.CentroCusto)
+                        </td>
+                        <td class="col-center">
+                            @Html.DisplayFor(modelItem => item.CentroCustoExterno)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TextoPedido)
+                        </td>
+                        <td class="col-center">
+                            @Html.DisplayFor(modelItem => item.Documento)
+                        </td>
+                        <td class="col-center">
+                            @Html.DisplayFor(modelItem => item.Lancamento)
+                        </td>
+                        <td class="col-right">
+                            @Html.DisplayFor(modelItem => item.NumeroEntrada)
+                        </td>
+                        <td class="col-right">
+                            @Html.DisplayFor(modelItem => item.Percentual)
+                        </td>
+                        <td class="col-right">
+                            @Html.DisplayFor(modelItem => item.ValorEntrada)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="divTabela" @ViewBag.AcaoControle>
+        <br />
+        <h5><b>Distribuição</b></h5>
+
+        <table id="tblInsere" class="tab-no-border">
+            <thead>
+                <tr class="tab-th-font">
+                    <th class="col-100"><label class="control-label">Classificação</label></th>
+                    <th class="col-50"></th>
+                    <th class="col-200"><label class="control-label">Função</label></th>
+                    <th class="col-50"></th>
+                    <th class="col-50"><label class="control-label">Reclassificação</label></th>
+                    <th class="col-50"></th>
+                    <th class="col-50 col-right"><label class="control-label col-right">Total</label></th>
+                    <th class="col-30"></th>
+                    <th class="col-50"><label class="control-label">%</label></th>
+                    <th class="col-30"></th>
+                    <th class="col-50"><label class="control-label">Valor(R$)</label></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>
+                        <select id="lstClassificacao" asp-items="ViewBag.ListaClassificacao" asp-for="ID" class="form-control" onchange="TrocarFuncao(this)"></select>
+                        <input type="hidden" id="iClassificado" value="@ViewBag.Classificacao" />
+                    </th>
+                    <th></th>
+                    <th class="col-center">
+                        <select id="lstFuncao" asp-items="ViewBag.ListaFuncao" asp-for="ID" class="form-control"></select>
+                    </th>
+                    <th></th>
+                    <th class="col-center">
+                        <select id="lstReclassificacao" asp-items="ViewBag.ListaClassificacao" asp-for="ID" class="form-control">
+                            <option value="0" selected="selected">Escolher Nova?</option>
+                        </select>
+                    </th>
+                    <th></th>
+                    <th class="col-right">
+                        <label class="control-label">@Model.Valor</label>
+                        <input type="hidden" id="iTotalRateio" value="@Model.Valor" />
+                    </th>
+                    <th class="col-center">
+                        <label class="control-label">x</label>
+                    </th>
+                    <th class="col-right">
+                        <input id="iPercentual" name="Percentual" class="form-control" onkeyup="somenteNumeros(this);"
+                               maxlength="6" onchange="CalculaValorRateio(this)" />
+                    </th>
+                    <th class="col-center">
+                        <label class="control-label">=</label>
+                    </th>
+                    <th class="col-right">
+                        <input id="iValorRateio" name="Rateio" class="form-control" disabled="disabled" />
+                    </th>
+                    <th>
+                        <button type="button" id="btnInserir" onclick="confirmacaoInclusaoRateio()" class="btn btn-primary btn-font">+</button>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <br />
+    <div class="divTabela" style="max-height:300px;">
+        <table id="tblContratoFuncao" class="table tabelaRecurso table-bordered">
+            <thead>
+                <tr class="tab-th-font">
+                    <th colspan="2" class="col-200 cor-bridge">
+                        @Html.DisplayNameFor(model => model.ContratoFuncaoModel.Funcao)
+                    </th>
+                    <th class="col-center col-50">
+                        @Html.DisplayNameFor(model => model.ContratoFuncaoModel.Classificacao)
+                    </th>
+                    <th class="col-center col-50">
+                        @Html.DisplayNameFor(model => model.ContratoFuncaoModel.Reclassificacao)
+                    </th>
+                    <th class="col-center col-50">
+                        @Html.DisplayNameFor(model => model.ContratoFuncaoModel.Percentual)
+                    </th>
+                    <th class="col-center col-50">
+                        @Html.DisplayNameFor(model => model.ContratoFuncaoModel.Rateio)
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tblContratoConteudo">
+                @foreach (var item in Model.ListaContratoFuncaoModel)
+                {
+                    <tr id="@Html.DisplayFor(modelItem => item.ID)">
+                        <td class="col-center col-30">
+                            <a onclick="confirmacaoExclusaoRateio(@item.ID)" @ViewBag.AcaoControleExclui title="Excluir Rateio do Contrato">
+                                <i class="glyphicon glyphicon-trash cor-bridge"></i>
+                            </a>
+                            <i class="glyphicon glyphicon-trash cor-disable" @ViewBag.AcaoControleExcluiD></i>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CodigoOperacao)&nbsp;-&nbsp;@Html.DisplayFor(modelItem => item.Funcao)
+                        </td>
+                        <td class="col-center">
+                            @Html.DisplayFor(modelItem => item.Classificacao)
+                        </td>
+                        <td class="col-center">
+                            @Html.DisplayFor(modelItem => item.Reclassificacao)
+                        </td>
+                        <td class="col-right">
+                            @Html.DisplayFor(modelItem => item.Percentual)
+                        </td>
+                        <td class="col-right">
+                            @Html.DisplayFor(modelItem => item.Rateio)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal Remocao Excecao -->
+    <div class="modal fade" id="modalExclusao" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-info" id="exampleModalLongTitle">Exclusão</h5>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="idRateioExclusao" />
+                    Deseja realmente excluir esse Rateio?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="excluirRateioContrato()">Sim</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cancelarExclusao()">Não</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sucesso -->
+    <div class="modal fade" id="modalExclusaoSucesso" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-success">Exclusão</h5>
+                </div>
+                <div class="modal-body">
+                    Exclusão realizada com Sucesso!
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" id="btnOkExclusao" value="OK" onclick="location.href='@Url.Action("ContratoDetalhe", "Servico")'" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Mensagem Erro -->
+    <div class="modal fade" id="modalExclusaoErro" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitleExcecao" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">Validação</h5>
+                </div>
+                <div class="modal-body">
+                    Erro ao realizar a exclusão do Rateio!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="fecharExclusaoErro()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalInclusao" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-info">Inclusão</h5>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="idRateioExclusao" />
+                    Deseja realmente incluir esse Rateio?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="incluirRateioContrato()">Sim</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cancelarInclusao()">Não</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalInclusaoSucesso" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-success">Inclusão</h5>
+                </div>
+                <div class="modal-body">
+                    Rateio cadastrado com Sucesso!
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" id="btnOkInclusao" value="OK" onclick="location.href='@Url.Action("ContratoDetalhe", "Servico")'" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Mensagem Erro -->
+    <div class="modal fade" id="modalInclusaoErro" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitleExcecao" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">Validação</h5>
+                </div>
+                <div class="modal-body" >
+                    <input type="text" id="lbInclusaoErro" class="tab-no-border cor-black" disabled style="width: 90%; text-size-adjust: auto" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="fecharInclusaoErro()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        var lClassificar = document.getElementById("lstClassificacao");
+        var iClassificado = document.getElementById("iClassificado");
+
+        lClassificar.options.selectedIndex = iClassificado.value;
+
+        function confirmacaoInclusaoRateio() {
+            var vlPercentual = $("#iPercentual").val().replace(',','.');
+            var idClassificacao = $("#lstClassificacao").val();
+            var idReclassificacao = $("#lstReclassificacao").val();
+
+            if (vlPercentual == '') {
+                $(".modal-body #lbInclusaoErro").val('O campo percentual (%) deve ser preenchido!');
+                $('#modalInclusaoErro').modal('show');
+            }
+            else {
+                if (idClassificacao == idReclassificacao) {
+                    $(".modal-body #lbInclusaoErro").val('A reclassificação não pode ser igual a classificação original!');
+                    $('#modalInclusaoErro').modal('show');
+                }
+                else {
+                    if (vlPercentual > 100) {
+                        $(".modal-body #lbInclusaoErro").val('O campo percentual deve ser menor que 100!');
+                        $('#modalInclusaoErro').modal('show');
+                    }
+                    else {
+                        if (parseFloat(vlPercentual) == 0) {
+                            $(".modal-body #lbInclusaoErro").val('O campo percentual deve ser maior que 0!');
+                            $('#modalInclusaoErro').modal('show');
+                        }
+                        else {
+                            $("#modalInclusao").modal('show');
+                        }
+                    }
+                }
+            }
+        }
+
+        function cancelarInclusao() {
+            $("#modalInclusao").modal('hide');
+        }
+
+        function incluirRateioContrato() {
+            var idFuncao = $("#lstFuncao").val();
+            var vlPercentual = $("#iPercentual").val().replace(',','.');
+            var idClassificacao = $("#lstReclassificacao").val();
+
+            var itemInclusao = {
+                ID: idFuncao,
+                Situacao: idClassificacao,
+                Valor: vlPercentual
+            };
+
+            $("#modalInclusao").modal('hide');
+            $.ajax({
+                url: '@Url.Action("ContratoRateioIncluir", "Servico")',
+                type: 'POST',
+                data: JSON.stringify(itemInclusao),
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data.length == 0) {
+                        $("#modalInclusaoSucesso").modal('show');
+                    }
+                    else {
+                        $(".modal-body #lbInclusaoErro").val(data);
+                        $('#modalInclusaoErro').modal('show');
+                        //alert("deu erro");
+                    }
+                },
+                error: function (data) {
+                    $('#modalInclusaoErro').modal('show');
+                },
+                complete: function (data) {
+                }
+            });
+        }
+
+        function confirmacaoExclusaoRateio(id) {
+            $("#modalExclusao").modal('show');
+            $(".modal-body #idRateioExclusao").val(id);
+        }
+
+        function cancelarExclusao() {
+            $("#modalExclusao").modal('hide');
+        }
+
+        function fecharExclusaoErro() {
+            $("#modalExclusaoErro").modal('hide');
+        }
+
+        function fecharInclusaoErro() {
+            $("#modalInclusaoErro").modal('hide');
+        }
+
+        function excluirRateioContrato() {
+            var idItemExc = $("#idRateioExclusao").val();
+
+            var itemExclusao = {
+                ID: idItemExc
+            };
+
+            $("#modalExclusao").modal('hide');
+            $.ajax({
+                url: '@Url.Action("ContratoRateioExcluir", "Servico")',
+                type: 'POST',
+                data: JSON.stringify(itemExclusao),
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data == true) {
+                        $("#modalExclusaoSucesso").modal('show');
+                    } else {
+                        $('#modalExclusaoErro').modal('show');
+                    }
+                },
+                error: function (data) {
+                    //alert("deu erro chamada");
+                    $('#modalExclusaoErro').modal('show');
+                },
+                complete: function (data) {
+
+                }
+            });
+        }
+
+        //To get selected value an text of dropdownlist
+        function TrocarFuncao(selFuncao) {
+            var idFuncao = selFuncao.value;
+
+            var itemFuncao = {
+                ID: idFuncao
+            };
+
+            $.ajax({
+                url: '@Url.Action("ContratoRateioFuncaoTrocar", "Servico")',
+                type: 'POST',
+                data: JSON.stringify(itemFuncao),
+                contentType: 'application/json',
+                success: function (data) {
+                    $("#lstFuncao").empty();
+                    $.each(data, function (index, element) {
+                        $("#lstFuncao").append('<option value="' + element.id_funcao + '">' + element.nm_funcao_composto + '</option>');
+                    });
+                },
+                complete: function (data) {
+                }
+            });
+        }
+
+        function CalculaValorRateio(objeto) {
+
+            var vPercentual = objeto.value.replace(',', '.');
+
+            if (vPercentual != '') {
+                var vTotal = $("#iTotalRateio").val().replace(',','.');
+
+                var vRateio = ((parseFloat(vTotal) * parseFloat(vPercentual)) / 100);
+                $("#iValorRateio").val(vRateio.toLocaleString('pt-BR'));
+            }
+            else {
+                $("#iValorRateio").val('');
+            }
+        }
+
+    </script>
+}

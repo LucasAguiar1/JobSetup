@@ -1,0 +1,34 @@
+﻿@model BridgestoneLibras.Models.LoginModel
+
+@{
+    ViewBag.Title = "Login";
+}
+@using (Html.BeginForm("Login", "Home", FormMethod.Post))
+{
+    //cria a tag do formulário
+    @Html.AntiForgeryToken() // previne o ataque CSRF
+    @Html.ValidationSummary(true)
+
+    <center>
+        <table style="align-content: center; margin-top: 60px; width: 300px">
+            <tr>
+                @*<td><h4 class="mb-3 font-weight-normal">Logar com o usuário de rede ou do ISAC</h4></td>*@
+            </tr>
+            <tr><td><label class="text-warning">@ViewBag.Message</label></td></tr>
+            <tr>
+                <td>@Html.TextBoxFor(a => a.Usuario, new { id = "Usuario", @class = "form-control", @required = "true", autofocus = "true", @placeholder = "Usuário", @autocomplete = "off" })</td>
+            </tr>
+            <tr>
+                <td>@Html.PasswordFor(a => a.Senha, new { @class = "form-control", @required = "true", autofocus = "true", @placeholder = "Senha", @autocomplete = "off" })</td>
+            </tr>
+            <tr>
+                <td><br /></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Entrar" />
+                </td>
+            </tr>
+        </table>
+    </center>
+}

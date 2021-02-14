@@ -1,0 +1,1040 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Departamento</title>
+</head>
+<body>
+
+    <div id="MenuLI"></div>
+    <div class="container">
+        <div id="formulario"></div>
+        <div id="conteudo"></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalmsn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Informação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="idmsn"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin:auto; background-color: black;">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lider -->
+    <div class="modal fade" id="modalLider" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Notificação Líder</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div id="msnNotificacao"></div>
+                        <label for="exampleFormControlTextarea2">Líder</label>
+                        <select id="lstLider" name="departamento" class="form-control"></select>
+                        <label for="exampleFormControlTextarea2">Notificação</label>
+                        <textarea class="form-control rounded-0" id="idtxtNotificacao" onkeypress="ClearField();" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" Class="btn btn-outline-danger btn-block" onclick="CadastrarNotificacao();" id="btnSalvarLider">Salvar</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-outline-dark  btn-block" style="margin-top: 0px;">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+</html>
+
+<div>
+    <script>
+
+
+
+        var conteudo = "";
+        var pnl = "";
+        var listIdsPerguntas = [];
+        var listIdsFilhos = [];
+        var menuVoltar = "";
+        //var valida = 0;
+        Menu = "Departamentos";
+        var idMaquina = 0;
+        var formulario = 0;
+        var departamento = 0;
+        var partemaquina = 0;
+        var html = "";
+        var oneMachine = 0;
+        var cont = 0;
+        (function () {
+            Departamentos();
+            MontarLI_Menu("Departamentos");
+        })();
+
+
+        function DefiniePainel(id, pnl) {
+            
+            switch (pnl) {
+                case "Departamentos":
+                    Departamentos();
+                    break;
+                case "Maquinas":
+                    
+                    Maquinas(id.id, 0);
+                    departamento = id.id;
+
+                    break;
+                case "MaquinasParte":
+                    MaquinasParte(id.id, 0);
+                    idMaquina = id.id;
+                    
+
+                    break;
+                case "Formulario":
+                    
+                    Formulario(id.id, 0);
+                    partemaquina = id.id;
+                    
+                    break;
+                case "Perguntas":
+                    Perguntas(id.id, 0);
+                    formulario = id.id;
+
+                    break;
+                default:
+            }
+        }
+
+        function Voltar() {
+
+            $("#formulario").empty();
+
+
+            if (pnl == "MaquinasParte") {
+                //MontarLI_Menu(menuVoltar);
+                Departamentos();
+                pnl = "Departamentos";
+            }
+            if (pnl == "Formulario") {
+                //MontarLI_Menu(menuVoltar);
+                Maquinas(departamento, 1);
+                pnl = "Maquinas";
+            }
+
+            if (pnl == "Perguntas") {
+                //MontarLI_Menu(menuVoltar);
+                MaquinasParte(idMaquina, 1);
+                pnl = "MaquinasParte";
+                oneMachine = 1;
+            }
+
+
+            if (pnl == "Respostas") {
+                //MontarLI_Menu(menuVoltar);
+                //var data = localStorage.getItem("partemaquina");
+                
+                Formulario(partemaquina, 1);
+
+                pnl = "Formulario";
+            }
+
+        }
+
+        function Departamentos() {
+
+            $.ajax({
+                url: "Departamentos/JobSetup",
+                dataType: 'json',
+                type: 'GET',
+                success: function (data) {
+                    if (data.length == 0) {
+                        var msn = "Não exitem Departamentos.";
+                        ModalAlert(msn)
+                    } else {
+                        MontarLI_Menu("Departamentos");
+                        MontaPainel(data);
+                        pnl = "Maquinas";
+                    }
+                }
+            });
+        }
+
+        function Maquinas(id) {
+
+            $.ajax({
+                url: "Maquinas/JobSetup?idDepartamento=" + id,
+                dataType: 'json',
+                type: 'GET',
+                success: function (data) {
+                    if (data.length == 0) {
+                        var msn = "Não exite(m) máquina(s) para esse Departamento.";
+                        ModalAlert(msn)
+
+                        return;
+
+                    } else {
+                        MontarLI_Menu("Maquinas");
+                        MontaPainel(data);
+                    }
+                    if (data.length > 0) {
+                        pnl = "MaquinasParte";
+                    }
+                }
+            });
+        }
+
+        function MaquinasParte(id) {
+            $.ajax({
+                url: "MaquinasParte/JobSetup?idMaquina=" + id,
+                dataType: 'json',
+                type: 'GET',
+                success: function (data) {
+                    if (data.length == 0) {
+                        var msn = "Não exite(m) Parte Máquina(s) para essa Máquina.";
+                        ModalAlert(msn)
+                        return;
+
+                    } else {
+                        if (data.length <= 1) {
+                            if (oneMachine == 0) {
+                        
+                                Formulario(data[0].id, 0);
+                                partemaquina = data[0].id;
+                            } else {
+                                MontaPainel(data);
+                                oneMachine = 0;
+                                MontarLI_Menu("MaquinasParte");
+
+                            }
+                        } else {
+                            
+                            MontaPainel(data);
+                            MontarLI_Menu("MaquinasParte");
+                            pnl = "Formulario";
+                        }
+
+                    }
+
+                    if (data.length > 0) {
+                        pnl = "Formulario";
+                        //pnl = "MaquinasParte";
+                    }
+                }
+            });
+        }
+
+        function Formulario(id, flag) {
+
+
+
+
+            $.ajax({
+                url: "Formularios/JobSetup?idMaquinaParte=" + id,
+                dataType: 'json',
+                type: 'GET',
+                success: function (data) {
+                    if (data.length == 0) {
+                        var msn = "Não exite(m) Formulário(s) para essa Parte Máquina.";
+
+                        ModalAlert(msn)
+                        return;
+
+                    } else {
+
+                        MontarLI_Menu("Formulario");
+                        MontaPainel(data);
+                        pnl = "Perguntas";
+
+                    }
+                }
+            });
+        }
+
+        function Perguntas(id, flag) {
+
+
+            listIdsPerguntas = [];
+            $.ajax({
+                url: "Perguntas/JobSetup?idFormulario=" + id,
+                dataType: 'json',
+                type: 'GET',
+                success: function (data) {
+                    if (data.length == 0) {
+                        var msn = "Não exite(m) Pergunta(s) cadastrada(s) para esse Formulário.";
+                        ModalAlert(msn)
+                        return;
+                    } else {
+                        MontarLI_Menu("Perguntas");
+                        $("#conteudo").empty();
+                        montaFormulario(data);
+
+                        if (flag == 0) {
+                            //menuVoltar = "Perguntas";
+                            pnl = "Respostas";
+                        }
+                    }
+                }
+            });
+        }
+
+        function MontaPainel(dados) {
+
+            var quantidade = 0;
+            var cont = 0;
+            var html = "";
+            if (dados.length > 0) {
+                quantidade = dados.length / 3;
+            }
+
+            $("#conteudo").empty();
+
+            for (var i = 0; i <= quantidade; i++) {
+                html += "<div class='row'>";
+                for (var j = 0; j < 4; j++) {
+                    if (cont <= dados.length - 1) {
+                        html += "<div class='col-lg-3 text-center' style='margin-top:21px;'>";
+                        html += "<button type='button'  style='width:100%; height:155px; value=" + dados[cont].id + " id='btnPainel" + dados[cont].id + "   onclick='DefiniePainel(this,pnl)' padding:14px 20px; font-size:22px; border-radius: 10px;' id=" + dados[cont].id + " class='btn btn-outline-danger'>" + dados[cont].nome + "</button>";
+                        html += "</div>";
+                        cont++;
+                    }
+                }
+                html += " </div>";
+            }
+            $("#conteudo").append(html);
+        }
+
+        function MontarLI_Menu(menu) {
+            var html = "";
+            $("#MenuLI").empty();
+            if (menu != "Departamentos") {
+                html += "<button type='button' style='color:red' class='btn btn-link' onclick='Voltar();' >(" + menu + " ) Voltar</button>";
+            } else {
+                html += "<button type='button' style='color:red' class='btn btn-btn'>" + menu + "</button > ";
+            }
+            $("#MenuLI").append(html);
+        }
+
+        function montaFormulario(dados) {
+
+            html = "";
+            $("#formulario").empty();
+
+            var contador = 0;
+
+            for (var i = 0; i < dados.length; i++) {
+                if (contador == 0) {
+                    html += "<div class='row text-center' style='margin-top:20px;'>";
+                    html += "<div class='col-lg-12'>";
+                    html += "<h2><label >" + dados[i].nomeFormulario + "</label></h2>";
+                    html += "<h4><label id='identificadorLote'>Identificador Lote:" + dados[i].identificadorLote + "</label></h4>";
+                    html += "</div>";
+                    html += "</div>";
+                }
+                contador++;
+                //Texto
+                if (dados[i].id_tipoResposta == 3) {
+                    Text(dados[i].nome, dados[i].id, dados[i].id_tipoResposta, dados[i].valor, dados[i].id_obrigatorio, dados[i].id_formulario, dados[i].chave);
+
+                }
+                //Número
+                if (dados[i].id_tipoResposta == 4) {
+                    Numero(dados[i].nome, dados[i].id, dados[i].id_tipoResposta, dados[i].valor, dados[i].id_obrigatorio, dados[i].id_formulario, dados[i].chave);
+                }
+                //Alternativas
+                if (dados[i].id_tipoResposta == 1) {
+                    Alternativas(dados, i, dados[i].id_tipoResposta, dados[i].valor, dados[i].id_obrigatorio, dados[i].id_formulario, dados[i].chave);
+                }
+                //Condição
+                if (dados[i].id_tipoResposta == 2) {
+                    Condicao(dados, i, dados[i].id_tipoResposta, dados[i].id_obrigatorio, dados[i].id_formulario, dados[i].chave);
+                }
+            }
+
+            html += "<div class='row' style='margin-top:10px;margin-bottom:56px';>";
+            html += "<div class='col-lg-3'>";
+            html += "<button type='button' id='btnAlterar' onclick='Salvar()' class='btn btn-outline-danger btn-block'>Salvar</button>";
+            html += "</div>";
+            html += "<div class='col-lg-3'>";
+            html += "<button type='button' id='btnLider' onclick='NotificarLider()' class='btn btn-outline-danger btn-block'>Notificar Líder</button>";
+            html += "</div>";
+            html += "<div class='col-lg-3'>";
+            html += "<button type='button' id='btnAlterar' onclick='Voltar()' class='btn btn-outline-dark  btn-block'>Voltar</button>";
+            html += "</div>";
+            html += "<div class='col-lg-3'>";
+            html += "<button type='button' id='btnLider' onclick='FinalizarRespostaPergunta()' class='btn btn-outline-danger btn-block'>Finalizar</button>";
+            html += "</div>";
+
+            html += "</div>";
+
+            $("#formulario").append(html);
+            DesabilitaCampos();
+            PopulaCampos();
+        }
+
+        function Salvar() {
+
+            ObtemValorCampos();
+
+            if (!VerificaObrigatoriedadeBotaoSalvar()) {
+
+                ModalAlert("É necessário responder pelo menos uma  pergunta para salvar o formulário.")
+
+                return
+            }
+
+            $.ajax({
+                url: 'RespostaPergunta/JobSetup',
+                type: 'POST',
+                traditional: true,
+                data: JSON.stringify(listIdsPerguntas),
+                contentType: 'application/json',
+                success: function (response) {
+                    //$("#dvtest").html(response);
+                    listIdsPerguntas = [];
+                    ModalAlert(response[0].msn);
+                    $("#formulario").empty();
+                    Formulario(partemaquina, 0);
+                }
+            });
+        }
+
+        function FinalizarRespostaPergunta() {
+
+            ObtemValorCampos();
+            if (VerificaObrigatoriedade()) {
+                $.ajax({
+                    url: 'FinalizarRespostaPergunta/JobSetup',
+                    type: 'POST',
+                    traditional: true,
+                    data: JSON.stringify(listIdsPerguntas),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        $("#dvtest").html(response);
+                        listIdsPerguntas = [];
+                        ModalAlert(response[0].msn);
+                        $("#formulario").empty();
+                        Formulario(partemaquina, 0);
+                    }
+                });
+            }
+        }
+
+        function VerificaObrigatoriedadeBotaoSalvar() {
+
+            var cont = 0;
+            if (listIdsPerguntas.length > 0) {
+
+                for (var i = 0; i < listIdsPerguntas.length; i++) {
+
+                    if (listIdsPerguntas[i].id_tipoResposta == 1) {
+
+                        if (listIdsPerguntas[i].valor == "0") {
+
+                            cont++;
+                            //return false;
+                        }
+
+                    }
+                    if (listIdsPerguntas[i].id_tipoResposta == 3) {
+
+                        if (listIdsPerguntas[i].valor == "") {
+                            //return false;
+                            cont++;
+                        }
+
+                    }
+                    if (listIdsPerguntas[i].id_tipoResposta == 4) {
+
+                        if (listIdsPerguntas[i].valor == "") {
+                            //return false;
+                            cont++;
+                        }
+
+                    }
+                    if (listIdsPerguntas[i].id_tipoResposta == 2) {
+                        if (listIdsPerguntas[i].id_obrigatorio == 1 && listIdsPerguntas[i].valor == "" && listIdsPerguntas[i].Filho.length > 0 && $("#" + listIdsPerguntas[i].id).is(":checked")) {
+
+                            for (var r = 0; r < listIdsPerguntas[i].Filho.length; r++) {
+
+                                if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 1) {
+
+                                    if (listIdsPerguntas[i].Filho[r].id_obrigatorio == 1 && listIdsPerguntas[i].Filho[r].valor == "0") {
+                                        //return false;
+                                        cont++;
+                                    }
+                                }
+
+                                if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 3) {
+
+                                    if (listIdsPerguntas[i].Filho[r].id_obrigatorio == 1 && listIdsPerguntas[i].Filho[r].valor == "") {
+                                        //return false;
+                                        cont++;
+                                    }
+
+                                }
+                                if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 4) {
+
+                                    if (listIdsPerguntas[i].Filho[r].id_obrigatorio == 1 && listIdsPerguntas[i].Filho[r].valor == "") {
+                                        //return false;
+                                        cont++;
+                                    }
+                                }
+                            }
+                        } else {
+                            cont++;
+                        }
+                    }
+                }
+            }
+            if (cont == listIdsPerguntas.length) {
+                return false;
+            } else {
+                return true;
+            }
+
+        }
+
+        function VerificaObrigatoriedade() {
+
+            if (listIdsPerguntas.length > 0) {
+
+                for (var i = 0; i < listIdsPerguntas.length; i++) {
+
+                    if (listIdsPerguntas[i].id_obrigatorio == 1 && (listIdsPerguntas[i].valor == "" || listIdsPerguntas[i].valor == null) && listIdsPerguntas[i].Filho.length == 0) {
+
+                        ModalAlert("Por favor, responda a pergunta " + listIdsPerguntas[i].nome)
+                        return false;
+                    }
+                    if (listIdsPerguntas[i].id_obrigatorio == 1 && (listIdsPerguntas[i].valor == "" || listIdsPerguntas[i].valor == null) && listIdsPerguntas[i].Filho.length > 0 && $("#" + listIdsPerguntas[i].id).is(":checked")) {
+
+                        for (var r = 0; r < listIdsPerguntas[i].Filho.length; r++) {
+
+                            if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 1) {
+
+                                if (listIdsPerguntas[i].Filho[r].id_obrigatorio == 1 && (listIdsPerguntas[i].Filho[r].valor == "0" || listIdsPerguntas[i].Filho[r].valor == null)) {
+                                    ModalAlert("Por favor, selecione a opção para a pergunta " + listIdsPerguntas[i].Filho[r].nome)
+                                    return false;
+                                }
+                            }
+
+                            if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 3) {
+
+                                if (listIdsPerguntas[i].Filho[r].id_obrigatorio == 1 && (listIdsPerguntas[i].Filho[r].valor == "" || listIdsPerguntas[i].Filho[r].valor == null)) {
+                                    ModalAlert("Por favor, responda a pergunta " + listIdsPerguntas[i].Filho[r].nome)
+                                    return false;
+                                }
+
+                            }
+                            if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 4) {
+
+                                if (listIdsPerguntas[i].Filho[r].id_obrigatorio == 1 && (listIdsPerguntas[i].Filho[r].valor == "" || listIdsPerguntas[i].Filho[r].valor == null)) {
+                                    ModalAlert("Por favor, responda a pergunta " + listIdsPerguntas[i].Filho[r].nome)
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        function Text(nome, id, id_tipoResposta, valor, id_obrigatorio, id_formulario, chave) {
+            listIdsFilhos = [];
+            html += "<div class='row text-left' style='margin-top:10px;'>";
+            html += "<div class='col-lg-4'>";
+            html += "<label>" + nome + "</label>";
+            html += "</div>";
+            html += "<div class='col-lg-8'>";
+            html += "<input type='text' maxlength='50' id=txt" + id + " name=" + nome + " class='form-control'/>";
+            html += "</div>";
+            html += "</div>";
+            MontaObjsPai(id, id_tipoResposta, listIdsFilhos, valor, id_obrigatorio, nome, id_formulario, chave);
+
+        }
+
+        function Numero(nome, id, id_tipoResposta, valor, id_obrigatorio, id_formulario, chave) {
+            listIdsFilhos = [];
+            html += "<div class='row text-left' style='margin-top:10px;'>";
+            html += "<div class='col-lg-4'>";
+            html += "<label>" + nome + "</label>";
+            html += "</div>";
+            html += "<div class='col-lg-8'>";
+            html += "<input type='text' onkeypress='ValidaNumeros(this);'  maxlength='50' id=txtNum" + id + " name=" + nome + " class='form-control'/>";
+            html += "</div>";
+            html += "</div>";
+
+            MontaObjsPai(id, id_tipoResposta, listIdsFilhos, valor, id_obrigatorio, nome, id_formulario, chave);
+        }
+
+        function Alternativas(dados, i, id_tipoResposta, valor, id_obrigatorio, id_formulario, chave) {
+            html += "<div class='row text-left' style='margin-top:10px;'>";
+            html += "<div class='col-lg-4'>";
+            html += "<label>" + dados[i].nome + "</label>";
+            html += "</div>";
+            html += "<div class='col-lg-8'>";
+            html += "<select id=lst" + dados[i].id + " name=" + dados[i].id + " class='form-control'>";
+
+            if (dados[i].listDescricaoMultiplaEscolha.length > 0) {
+                for (var f = 0; f < dados[i].listDescricaoMultiplaEscolha.length; f++) {
+                    html += "<option value=" + dados[i].listDescricaoMultiplaEscolha[f].id + ">" + dados[i].listDescricaoMultiplaEscolha[f].nome + "</option>";
+                }
+            }
+            html += "</select >";
+            html += "</div>";
+            html += "</div>";
+
+            listIdsFilhos = [];
+            MontaObjsPai(dados[i].id, id_tipoResposta, listIdsFilhos, valor, id_obrigatorio, dados[i].nome, id_formulario, chave);
+
+        }
+
+        function Condicao(dados, i, id_tipoResposta, id_obrigatorio, id_formulario, chave) {
+
+
+            html += "<div class='row text-left' style='margin-top:10px;'>";
+            html += "<div class='col-lg-2'>";
+            html += "<input type='checkbox' id=" + dados[i].id + " name=" + dados[i].id + " value=" + dados[i].id + " onchange='HabilitaDesabilitaCampos(" + dados[i].id + ")' >";
+            html += "</div>";
+            html += "<div class='col-lg-10'>";
+            html += "<label style='margin-left:-149px;' for=" + dados[i].id + "> " + dados[i].nome + "</label><br>";
+            html += "</div>";
+            html += "</div>";
+
+            if (dados[i].listFilhos.length > 0) {
+                listIdsFilhos = [];
+                for (var x = 0; x < dados[i].listFilhos.length; x++) {
+
+                    if (dados[i].listFilhos[x].id_tipoResposta == 1) //Alternativa
+                    {
+                        if (cont != 0) {
+                            cont++;
+                        }
+                        html += "<div class='row text-left' style='margin-top:10px;'>";
+                        html += "<div class='col-lg-4'>";
+                        html += "<label id=lbl" + dados[i].listFilhos[x].id_filho + ">" + dados[i].listFilhos[x].nome + "</label>";
+                        html += "</div>";
+
+                        html += "<div class='col-lg-8'>";
+                        html += "<select id=lst" + dados[i].listFilhos[x].id_filho + " name=" + dados[i].listFilhos[x].id_filho + " class='form-control'>";
+
+                        for (var t = 0; t < dados[i].listFilhos[x].listDescricaoMultiplaEscolha.length; t++) {
+                            html += "<option value=" + dados[i].listFilhos[x].listDescricaoMultiplaEscolha[t].id + ">" + dados[i].listFilhos[x].listDescricaoMultiplaEscolha[t].nome + "</option>";
+                        }
+                        html += "</select >";
+                        html += "</div>";
+                        html += "</div>";
+
+                        MontaObjsFilho(dados[i].listFilhos[x].id_filho, dados[i].id, dados[i].listFilhos[x].id_tipoResposta, dados[i].listFilhos[x].valor, dados[i].listFilhos[x].id_obrigatorio, dados[i].listFilhos[x].nome, dados[i].listFilhos[x].chave);
+                    }
+
+
+                    if (dados[i].listFilhos[x].id_tipoResposta == 4) //número
+                    {
+                        html += "<div class='row text-left' style='margin-top:10px;'>";
+                        html += "<div class='col-lg-4'>";
+                        html += "<label id =lbl" + dados[i].listFilhos[x].id_filho + ">" + dados[i].listFilhos[x].nome + "</label>";
+                        html += "</div>";
+
+                        html += "<div class='col-lg-8'>";
+                        html += "<input type='text' maxlength='50'  onkeypress='ValidaNumeros(this);'  id=txtNum" + dados[i].listFilhos[x].id_filho + " name=" + dados[i].listFilhos[x].id_filho + " class='form-control'/>";
+                        html += "</div>";
+                        html += "</div>";
+
+                        MontaObjsFilho(dados[i].listFilhos[x].id_filho, dados[i].id, dados[i].listFilhos[x].id_tipoResposta, dados[i].listFilhos[x].valor, dados[i].listFilhos[x].id_obrigatorio, dados[i].listFilhos[x].nome, dados[i].listFilhos[x].chave);
+                    }
+
+                    if (dados[i].listFilhos[x].id_tipoResposta == 3) //Text
+                    {
+                        html += "<div class='row text-left' style='margin-top:10px;'>";
+                        html += "<div class='col-lg-4'>";
+                        html += "<label id =lbl" + dados[i].listFilhos[x].id_filho + ">" + dados[i].listFilhos[x].nome + "</label>";
+                        html += "</div>";
+                        html += "<div class='col-lg-8'>";
+                        html += "<input type='text' maxlength='50' id=txt" + dados[i].listFilhos[x].id_filho + " name=" + dados[i].listFilhos[x].id_filho + " class='form-control'/>";
+                        html += "</div>";
+                        html += "</div>";
+
+                        MontaObjsFilho(dados[i].listFilhos[x].id_filho, dados[i].id, dados[i].listFilhos[x].id_tipoResposta, dados[i].listFilhos[x].valor, dados[i].listFilhos[x].id_obrigatorio, dados[i].listFilhos[x].nome, dados[i].listFilhos[x].chave);
+                    }
+                }
+            }
+
+
+            MontaObjsPai(dados[i].id, id_tipoResposta, listIdsFilhos, "", id_obrigatorio, dados[i].nome, id_formulario, chave)
+        }
+
+        function MontaObjsPai(id, id_tipoResposta, listIdsFilhos, valor, id_obrigatorio, nome, id_formulario, chave) {
+
+            var myData = "";
+            myData = {
+                id: id,
+                id_tipoResposta: id_tipoResposta,
+                valor: valor,
+                id_obrigatorio: id_obrigatorio,
+                nome: nome,
+                id_formulario: id_formulario,
+                chave: chave,
+                Filho: listIdsFilhos
+            };
+            listIdsPerguntas.push(myData);
+        }
+
+        function MontaObjsFilho(id, idPai, id_tipoResposta, valor, id_obrigatorio, nome, chave) {
+            var filho = "";
+            filho = {
+                id: id,
+                idPai: idPai,
+                valor: valor,
+                id_tipoResposta: id_tipoResposta,
+                id_obrigatorio: id_obrigatorio,
+                nome: nome,
+                chave: chave
+            }
+
+            listIdsFilhos.push(filho);
+        }
+
+        function PopulaCampos() {
+            var cont = 0;
+
+            if (listIdsPerguntas.length > 0) {
+
+                for (var i = 0; i < listIdsPerguntas.length; i++) {
+
+                    //Text
+                    if (listIdsPerguntas[i].id_tipoResposta == 3) {
+                        //if ($("#txt" + listIdsPerguntas[i].id).val() != "") {
+                        $("#txt" + listIdsPerguntas[i].id).val(listIdsPerguntas[i].valor);
+                        //}
+                    }
+                    //Numero
+                    if (listIdsPerguntas[i].id_tipoResposta == 4) {
+                        //if ($("#txtNum" + listIdsPerguntas[i].id).val() != "") {
+                        $("#txtNum" + listIdsPerguntas[i].id).val(listIdsPerguntas[i].valor);
+                        //}
+                    }
+                    //Alternativas
+                    if (listIdsPerguntas[i].id_tipoResposta == 1) {
+                        if (listIdsPerguntas[i].valor == null || listIdsPerguntas[i].valor == 0) {
+                            $("#lst" + listIdsPerguntas[i].id).val(0);
+                        } else {
+                            $("#lst" + listIdsPerguntas[i].id).val(listIdsPerguntas[i].valor);
+                        }
+                    }
+                    //Condição
+                    if (listIdsPerguntas[i].id_tipoResposta == 2) {
+
+                        //$('.myCheckbox').prop('checked', false);
+
+                        if (listIdsPerguntas[i].Filho.length > 0) {
+
+                            for (var r = 0; r < listIdsPerguntas[i].Filho.length; r++) {
+
+                                if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 4) {
+
+
+                                    $("#txtNum" + listIdsPerguntas[i].Filho[r].id).val(listIdsPerguntas[i].Filho[r].valor);
+                                    if (listIdsPerguntas[i].Filho[r].valor != "" && listIdsPerguntas[i].Filho[r].valor != null) {
+                                        cont++;
+                                    }
+
+                                }
+                                if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 1) {
+                                    if (listIdsPerguntas[i].Filho[r].valor == null || listIdsPerguntas[i].Filho[r].valor == "") {
+                                        $("#lst" + listIdsPerguntas[i].Filho[r].id).val(0);
+                                    } else {
+                                        $("#lst" + listIdsPerguntas[i].Filho[r].id).val(listIdsPerguntas[i].Filho[r].valor);
+
+                                        if (listIdsPerguntas[i].Filho[r].valor != "" && listIdsPerguntas[i].Filho[r].valor != null && listIdsPerguntas[i].Filho[r].valor != "0") {
+                                            cont++;
+                                        }
+                                    }
+                                }
+                                if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 3) {
+
+                                    //if ($("#txt" + listIdsPerguntas[i].Filho[r].id).val() != "") {
+                                    $("#txt" + listIdsPerguntas[i].Filho[r].id).val(listIdsPerguntas[i].Filho[r].valor);
+                                    if (listIdsPerguntas[i].Filho[r].valor != "" && listIdsPerguntas[i].Filho[r].valor != null) {
+                                        cont++;
+                                    }
+                                    //}
+                                }
+                            }
+                        }
+                        if (cont != 0) {
+                            $("#" + listIdsPerguntas[i].id).prop('checked', true);
+                            HabilitaDesabilitaCampos(listIdsPerguntas[i].id);
+                            cont = 0;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        function ObtemValorCampos() {
+
+            if (listIdsPerguntas.length > 0) {
+
+                //alert($("#identificadorLote").val());
+                //listIdsPerguntas[i].valor = $("#identificadorLote").val();
+
+                for (var i = 0; i < listIdsPerguntas.length; i++) {
+
+                    //Text
+                    if (listIdsPerguntas[i].id_tipoResposta == 3) {
+                        if ($("#txt" + listIdsPerguntas[i].id).val() != "") {
+                            listIdsPerguntas[i].valor = $("#txt" + listIdsPerguntas[i].id).val();
+                        }
+                    }
+                    //Numero
+                    if (listIdsPerguntas[i].id_tipoResposta == 4) {
+                        if ($("#txtNum" + listIdsPerguntas[i].id).val() != "") {
+                            listIdsPerguntas[i].valor = $("#txtNum" + listIdsPerguntas[i].id).val();
+                        }
+                    }
+                    //Alternativas
+                    if (listIdsPerguntas[i].id_tipoResposta == 1) {
+                        if ($("#lst" + listIdsPerguntas[i].id).val() != "") {
+                            listIdsPerguntas[i].valor = $("#lst" + listIdsPerguntas[i].id).val();
+                        }
+                    }
+                    //Condição
+                    if (listIdsPerguntas[i].id_tipoResposta == 2) {
+
+                        if (listIdsPerguntas[i].Filho.length > 0) {
+
+                            for (var r = 0; r < listIdsPerguntas[i].Filho.length; r++) {
+
+                                if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 4) {
+
+                                    if ($("#txtNum" + listIdsPerguntas[i].Filho[r].id).val() != "") {
+                                        listIdsPerguntas[i].Filho[r].valor = $("#txtNum" + listIdsPerguntas[i].Filho[r].id).val();
+                                    }
+                                }
+                                if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 1) {
+
+                                    if ($("#lst" + listIdsPerguntas[i].Filho[r].id).val() != "") {
+                                        listIdsPerguntas[i].Filho[r].valor = $("#lst" + listIdsPerguntas[i].Filho[r].id).val();
+                                    }
+                                }
+                                if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 3) {
+
+                                    if ($("#txt" + listIdsPerguntas[i].Filho[r].id).val() != "") {
+                                        listIdsPerguntas[i].Filho[r].valor = $("#txt" + listIdsPerguntas[i].Filho[r].id).val();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function DesabilitaCampos() {
+            for (var i = 0; i < listIdsPerguntas.length; i++) {
+
+                if (listIdsPerguntas[i].id_tipoResposta == 2) {
+
+                    if (listIdsPerguntas[i].Filho.length > 0) {
+
+                        for (var r = 0; r < listIdsPerguntas[i].Filho.length; r++) {
+
+                            if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 4) {
+                                $("#txtNum" + listIdsPerguntas[i].Filho[r].id).hide();
+                                $("#lbl" + listIdsPerguntas[i].Filho[r].id).hide();
+                            }
+                            if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 3) {
+                                $("#txt" + listIdsPerguntas[i].Filho[r].id).hide();
+                                $("#lbl" + listIdsPerguntas[i].Filho[r].id).hide();
+                            }
+                            if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 1) {
+                                $("#lst" + listIdsPerguntas[i].Filho[r].id).hide();
+                                $("#lbl" + listIdsPerguntas[i].Filho[r].id).hide();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function HabilitaDesabilitaCampos(id) {
+
+
+            if ($("#" + id).is(":checked")) {
+
+                for (var i = 0; i < listIdsPerguntas.length; i++) {
+
+                    if (listIdsPerguntas[i].id_tipoResposta == 2) {
+
+                        if (listIdsPerguntas[i].id == id) {
+
+                            if (listIdsPerguntas[i].Filho.length > 0) {
+
+                                for (var r = 0; r < listIdsPerguntas[i].Filho.length; r++) {
+
+                                    if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 4) {
+                                        $("#txtNum" + listIdsPerguntas[i].Filho[r].id).show();
+                                        $("#lbl" + listIdsPerguntas[i].Filho[r].id).show();
+                                    }
+                                    if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 3) {
+                                        $("#txt" + listIdsPerguntas[i].Filho[r].id).show();
+                                        $("#lbl" + listIdsPerguntas[i].Filho[r].id).show();
+                                    }
+                                    if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 1) {
+                                        $("#lst" + listIdsPerguntas[i].Filho[r].id).show();
+                                        $("#lbl" + listIdsPerguntas[i].Filho[r].id).show();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            } else {
+
+                for (var i = 0; i < listIdsPerguntas.length; i++) {
+
+                    if (listIdsPerguntas[i].id_tipoResposta == 2) {
+
+                        if (listIdsPerguntas[i].id == id) {
+
+                            if (listIdsPerguntas[i].Filho.length > 0) {
+
+                                for (var r = 0; r < listIdsPerguntas[i].Filho.length; r++) {
+                                    if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 4) {
+                                        $("#txtNum" + listIdsPerguntas[i].Filho[r].id).hide();
+                                        $("#lbl" + listIdsPerguntas[i].Filho[r].id).hide();
+                                    }
+                                    if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 3) {
+                                        $("#txt" + listIdsPerguntas[i].Filho[r].id).hide();
+                                        $("#lbl" + listIdsPerguntas[i].Filho[r].id).hide();
+                                    }
+                                    if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 1) {
+                                        $("#lst" + listIdsPerguntas[i].Filho[r].id).hide();
+                                        $("#lbl" + listIdsPerguntas[i].Filho[r].id).hide();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        function ValidaNumeros(x) {
+
+            $(x).val($(x).val().replace(/[^0-9\.]/g, ''));
+            if ((event.which != 46 || $(x).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        }
+
+        function ModalAlert(msn) {
+            $("#modalmsn").modal('show');
+            var resposta = '';
+            $("#idmsn").empty();
+            resposta = "<div class='alert alert-danger  text-center' role='alert'>" + msn + "</div>";
+            $("#idmsn").append(resposta);
+        }
+
+       // //Notificação Líder
+        function NotificarLider() {
+           
+            $("#modalLider").modal('show');
+
+            ConsultarListaUsuarios();
+        }
+
+        function CadastrarNotificacao() {
+            $("#msnNotificacao").empty();
+            if ($("#idtxtNotificacao").val() != "") {
+
+                var myData = "";
+                myData = {
+                    id_formulario: formulario,
+                    notificacao: $("#idtxtNotificacao").val().trim(),
+                    id_lider: $("#lstLider").val()
+                };
+
+                $.ajax({
+                    url: 'Notificacao/JobSetup',
+                    type: 'POST',
+                    traditional: true,
+                    data: JSON.stringify(myData),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        ModalNotificacao(response.msn);
+                        myData = "";
+
+                    }
+                });
+            } else {
+
+                ModalNotificacao("Por favor informe a observação para  salvar a  Notificação.");
+            }
+        }
+
+        function ClearField() {
+            $("#msnNotificacao").empty();
+        }
+
+        function ModalNotificacao(msn) {
+            
+            var resposta = '';
+            $("#msnNotificacao").empty();
+            resposta = "<div class='alert alert-danger  text-center' role='alert'>"+ msn + "</div>";
+            $("#msnNotificacao").append(resposta);
+        }
+
+        function ConsultarListaUsuarios() {
+            
+            
+            $.ajax({
+                url: "ConsultarListaUsuarios/JobSetup?idDepartamento=" + departamento, 
+                dataType: 'json',
+                type: 'GET',
+                success: function (data) {
+                    var obj = data;
+                    $("#lstLider").html("");
+                    if (obj.length == 0) {
+                        $("#lstLider").prop('disabled', true);
+                    } else {
+                        $("#lstLider").prop('disabled', false);
+                        $.each(obj, function (i, index) {
+                            $("#lstLider").append(
+                                $('<option></option>').val(index.value).html(index.text));
+                        })
+                        $("#lstLider").prop('selectedIndex');
+                    }
+                },
+                error: function (data) {
+                    alert("erro");
+                    console.log(data);
+                }
+            });
+        }
+
+
+
+    </script>
+</div>
+

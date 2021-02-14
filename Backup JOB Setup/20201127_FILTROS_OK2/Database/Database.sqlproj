@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{6b8f50d1-e4dc-438f-9ad6-eeb6a1848473}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Database</RootNamespace>
+    <AssemblyName>Database</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Procedures" />
+    <Folder Include="Tables" />
+    <Folder Include="Functions" />
+    <Folder Include="Views" />
+    <Folder Include="Jobs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Functions\fc_Split.sql" />
+    <Build Include="Procedures\sp_login_validar.sql" />
+    <Build Include="Tables\tb_Areas.sql" />
+    <Build Include="Tables\tb_CentroCusto.sql" />
+    <Build Include="Tables\tb_Classificacoes.sql" />
+    <Build Include="Tables\tb_Contratos.sql" />
+    <Build Include="Tables\tb_Contratos_Funcoes.sql" />
+    <Build Include="Tables\tb_Contratos_Itens.sql" />
+    <Build Include="Tables\tb_Dominios.sql" />
+    <Build Include="Tables\tb_Log_Processos.sql" />
+    <Build Include="Tables\tb_Motivos.sql" />
+    <Build Include="Tables\tb_Periodos.sql" />
+    <Build Include="Tables\tb_Situacoes.sql" />
+    <Build Include="Tables\tb_Tipos.sql" />
+    <Build Include="Tables\tb_Calendarios.sql" />
+    <Build Include="Tables\tb_Funcoes.sql" />
+    <Build Include="Tables\tb_Parametros.sql" />
+    <Build Include="Tables\tb_Periodos_Recursos.sql" />
+    <Build Include="Tables\tb_Recursos.sql" />
+    <Build Include="Procedures\sp_contrato_consultar.sql" />
+    <Build Include="Procedures\sp_recurso_consultar.sql" />
+    <Build Include="Procedures\sp_contrato_excluir.sql" />
+    <Build Include="Procedures\sp_periodo_consultar.sql" />
+    <Build Include="Tables\tb_Contratos_Importacao.sql" />
+    <Build Include="Tables\tb_Contratos_Rateio_Funcoes.sql" />
+    <Build Include="Procedures\sp_contrato_importar.sql" />
+    <Build Include="Procedures\sp_contrato_item_consultar.sql" />
+    <Build Include="Tables\tb_Recursos_Excecoes.sql" />
+    <Build Include="Tables\tb_Recursos_PontosRH.sql" />
+    <Build Include="Tables\tb_Recursos_Transferencias.sql" />
+    <Build Include="Tables\tb_Funcoes_CentroCusto.sql" />
+    <Build Include="Tables\tb_Categorias.sql" />
+    <Build Include="Tables\tb_CentroCusto_Categorias.sql" />
+    <Build Include="Procedures\sp_contrato_funcao_consultar.sql" />
+    <Build Include="Procedures\sp_log_processo_incluir.sql" />
+    <Build Include="Procedures\sp_classificacao_consultar.sql" />
+    <Build Include="Procedures\sp_contrato_rateio_excluir.sql" />
+    <Build Include="Procedures\sp_funcao_consultar.sql" />
+    <Build Include="Procedures\sp_contrato_rateio_incluir.sql" />
+    <Build Include="Procedures\sp_recurso_alterar.sql" />
+    <Build Include="Procedures\sp_centrocusto_consultar.sql" />
+    <Build Include="Procedures\sp_excecao_consultar.sql" />
+    <Build Include="Procedures\sp_excecao_excluir.sql" />
+    <Build Include="Procedures\sp_excecao_incluir.sql" />
+    <Build Include="Procedures\sp_motivo_consultar.sql" />
+    <Build Include="Procedures\sp_recurso_dados.sql" />
+    <Build Include="Procedures\sp_transferencia_consultar.sql" />
+    <Build Include="Procedures\sp_transferencia_excluir.sql" />
+    <Build Include="Procedures\sp_transferencia_incluir.sql" />
+    <Build Include="Procedures\sp_periodo_calendario_alterar.sql" />
+    <Build Include="Procedures\sp_periodo_calendario_consultar.sql" />
+    <Build Include="Procedures\sp_periodo_alterar.sql" />
+    <Build Include="Procedures\sp_periodo_fechamento.sql" />
+    <Build Include="Procedures\sp_periodo_reabrir.sql" />
+    <Build Include="Procedures\sp_contrato_rateio_calculo.sql" />
+    <Build Include="Procedures\sp_fechamento_processar.sql" />
+    <Build Include="Tables\tb_Fechamentos_CentroCusto_Diario.sql" />
+    <Build Include="Tables\tb_Pesos_Armazenados.sql" />
+    <Build Include="Procedures\sp_relatorio_produtividade_diaria.sql" />
+    <Build Include="Tables\tb_Fechamentos_CentroCusto_Mensal.sql" />
+    <Build Include="Procedures\sp_relatorio_produtividade_mensal.sql" />
+    <Build Include="Procedures\sp_relatorio_acompanhamento_mensal.sql" />
+    <Build Include="Tables\tb_Fechamentos_Categoria_Mensal.sql" />
+    <Build Include="Tables\tb_Fechamentos_CentroCusto_Mensal_Categoria.sql" />
+    <Build Include="Procedures\sp_relatorio_fechamento_mensal.sql" />
+    <Build Include="Procedures\sp_fechamento_validar.sql" />
+    <Build Include="Tables\00_Insert Base.sql" />
+    <Build Include="Tables\01_Insert Centro Custo.sql" />
+    <Build Include="Tables\02_Insert Funções.sql" />
+    <Build Include="Tables\03_Insert Recursos.sql" />
+    <Build Include="Tables\04_Insert Fechamento.sql" />
+    <Build Include="Tables\04_Insert Pesos Armazenados.sql" />
+    <Build Include="Tables\tb_Experiencias.sql" />
+    <Build Include="Procedures\sp_processa_experiencia_atualizar.sql" />
+    <Build Include="Procedures\sp_relatorio_periodos.sql" />
+    <Build Include="Tables\tb_Fechamentos_Classificacao_CentroCusto.sql" />
+    <Build Include="Procedures\sp_relatorio_classificacao_centrocusto.sql" />
+    <Build Include="Procedures\sp_relatorio_classificacao_categoria.sql" />
+    <Build Include="Procedures\sp_relatorio_classificacao_funcao.sql" />
+    <Build Include="Procedures\sp_relatorio_classificacao_motivo.sql" />
+    <Build Include="Procedures\sp_relatorio_classificacao_servico_categoria.sql" />
+    <Build Include="Procedures\sp_relatorio_classificacao_servico_funcao.sql" />
+    <Build Include="Tables\tb_Fechamentos_Classificacao_Categoria.sql" />
+    <Build Include="Tables\tb_Fechamentos_Classificacao_Funcao.sql" />
+    <Build Include="Tables\tb_Fechamentos_Classificacao_Motivo.sql" />
+    <Build Include="Tables\tb_Fechamentos_Classificacao_Servico_Categoria.sql" />
+    <Build Include="Tables\tb_Fechamentos_Classificacao_Servico_Funcao.sql" />
+    <Build Include="Tables\tb_Carga_Apontamentos.sql" />
+    <Build Include="Tables\tb_Carga_Cargos.sql" />
+    <Build Include="Tables\tb_Carga_CentrosCusto.sql" />
+    <Build Include="Tables\tb_Carga_Empresas.sql" />
+    <Build Include="Tables\tb_Carga_Funcionarios.sql" />
+    <Build Include="Tables\tb_Carga_Tipos_Verbas.sql" />
+    <Build Include="Procedures\sp_parametro_alterar.sql" />
+    <Build Include="Procedures\sp_parametro_consultar.sql" />
+    <Build Include="Procedures\sp_transferencia_email.sql" />
+    <Build Include="Procedures\sp_area_consultar.sql" />
+    <Build Include="Procedures\sp_tipo_consultar.sql" />
+    <Build Include="Procedures\sp_centrocusto_alterar.sql" />
+    <Build Include="Procedures\sp_centrocusto_categoria_alterar.sql" />
+    <Build Include="Procedures\sp_centrocusto_categoria_consultar.sql" />
+    <Build Include="Procedures\sp_centrocusto_lider_consultar.sql" />
+    <Build Include="Procedures\sp_centrocusto_lider_alterar.sql" />
+    <Build Include="Procedures\sp_categoria_consultar.sql" />
+    <Build Include="Procedures\sp_peso_armazenado_consultar.sql" />
+    <Build Include="Procedures\sp_peso_armazenado_importar.sql" />
+    <None Include="Jobs\LHH - Importe Diário.sql" />
+    <Build Include="Procedures\sp_carga_processar.sql" />
+    <Build Include="Functions\fc_Trim.sql" />
+    <None Include="Tables\tb_Cargos_Funcoes.sql" />
+    <Build Include="Procedures\sp_funcao_alterar.sql" />
+    <Build Include="Procedures\sp_funcao_centrocusto_consultar.sql" />
+    <Build Include="Procedures\sp_funcao_centrocusto_alterar.sql" />
+    <Build Include="Procedures\sp_funcao_incluir.sql" />
+    <Build Include="Procedures\sp_funcao_excluir.sql" />
+    <Build Include="Procedures\sp_periodo_criar.sql" />
+    <None Include="Jobs\LHH - Processo Diário.sql" />
+    <Build Include="Procedures\sp_log_processo_excluir.sql" />
+    <None Include="Tables\tb_Listas.sql" />
+    <Build Include="Tables\tb_Feriados.sql" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,202 @@
+﻿@model IEnumerable<BridgestoneLibras.Models.NotificacaoLiderModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<ul class="breadcrumb">
+    <li>Lista de Notificações</li>
+</ul>
+
+@using (Html.BeginForm())
+{
+    <div class="form-control-feedback">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label><strong>Operador:</strong></label>
+                <select id="rl_operador" name="rl_operador" asp-items="ViewBag.ListaUsuarioOperador" class="form-control"></select>
+            </div>
+        </div>
+        <input class="btn btn-danger" type="submit" value="Pesquisa" tyle="text-align:right" />
+    </div>
+}
+<br />
+@if (@TempData["Msg"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @Html.Raw(TempData["Msg"])
+    </div>
+}
+
+<table class="table table-striped  dt-responsive nowrap">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Id")
+            </th>
+            <th>
+                @Html.DisplayName("Operador")
+            </th>
+            <th>
+                @Html.DisplayName("Descrição")
+            </th>
+            <th>
+                @Html.DisplayName("Data de Leitura Líder")
+            </th>
+            <th>
+                @Html.DisplayName("")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id_notificacao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UsuarioOperador.nm_usuario)   @* NOME DO OPERADOR *@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ds_operador_notificacao)     @* DESCRIÇÃO DA NOTIFICAÇÃO FEITA PELO OPERADOR *@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.dt_lider_leitura)               @* DATA DE GRAVAÇÃO DA CIENCIA DA NOTIFICACAO DO LIDER*@
+                </td>
+                <td>
+                    @*<a href="#" onclick="AbrirNotificacao('@item.id_notificacao',
+                                                              '@item.Formulario.Maquina.nm_maquina',
+                                                              '@item.Formulario.MaquinaParte.ds_maquina_parte',
+                                                              '@item.Formulario.ds_nome',
+                                                              '@item.Formulario.Maquina.departamento.codigo_departamento',
+                                                              '@item.Formulario.Maquina.departamento.depto',
+                                                              '@item.ds_operador_notificacao',
+                                                              '@item.ds_lider_notificacao',
+                                                              '@item.dt_lider_leitura'
+                                                              )">
+                        <img src="~/images/editar.png" width="15" height="15" />*@
+                    @*</a>*@
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="modalDadosNotificacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 80px;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Descrição da Mensagem ao líder</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label id="lbldt_lider_leitura" style="display:none"></label>
+                    <label style="display:block" id="lblid_notificacao"></label>
+                    <div class="col-lg-6">
+                        <label>Departamento</label>
+                        <input type="text" id="lbldepartamento" readonly="true" class="form-control">
+                    </div>
+                    <div class="col-lg-6">
+                        <label>Máquina</label>
+                        <input type="text" id="lblnm_maquina" readonly="true" class="form-control">
+                    </div>
+                    <div class="col-lg-6">
+                        <label>Máquina Parte</label>
+                        <input type="text" id="lblds_maquina_parte" readonly="true" class="form-control">
+                    </div>
+                    <div class="col-lg-6">
+                        <label>Formulário</label>
+                        <input type="text" id="lblds_nome" readonly="true" class="form-control">
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label>Mensagem do Operador</label> <br />
+                    <textarea class="form-control" name="mensagemOperador" readonly="true" id="mensagemOperador" cols="90" rows="5"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Mensagem do Líder</label> <br />
+                    <textarea name="mensagemLider" class="form-control" id="mensagemLider" cols="90" rows="5"></textarea>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnEnviarNotificacao" class="btn btn-danger" onclick="EnviaNotificacaoLider()" data-dismiss="modal" style="margin:auto; ">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function AbrirNotificacao(id_notifica, nm_maquina, ds_maquina_parte, ds_nome, codigo_departamento, depto, desc_operador, ds_lider_notificacao, dt_lider_leitura) {
+          $("#modalDadosNotificacao").modal('show');
+
+          //POPULANDO OS CAMPOS DDA MODAL.
+          $("#lblid_notificacao").val(id_notifica);
+          $("#lbldepartamento").val(codigo_departamento + " - " + depto);
+          $("#lblnm_maquina").val(nm_maquina);
+          $("#lblds_maquina_parte").val(ds_maquina_parte);
+          $("#lblds_nome").val(ds_nome);
+          $("#mensagemOperador").val(desc_operador);
+          $("#mensagemLider").val(ds_lider_notificacao);
+
+          $('#lbldt_lider_leitura').val(dt_lider_leitura);
+
+        //REGRA PARA HABILITAR/DESABILITAR A EDIÇÃO DO CAMPO DA MENSAGEM DO LIDER.
+        if ($('#lbldt_lider_leitura').val() != null && $('#lbldt_lider_leitura').val() != '') {
+            $("#mensagemLider").prop("readonly", "true");
+            document.getElementById("btnEnviarNotificacao").disabled = true;
+        } else {
+            document.getElementById("btnEnviarNotificacao").disabled = false;
+            $("#mensagemLider").removeAttr('readonly');
+            // ATUALIZA A DATA DE LEITURA DO LIDER.
+            var link = '@Url.Action("AtualizaDataLeituraLider", "NotificacaoLider")';
+            var dado = { id_notificacao: id_notifica };
+
+            $.ajax({
+                  url: link,
+                  data: JSON.stringify(dado),
+                      type: 'POST',
+                      traditional: true,
+                      contentType: 'application/json',
+                      success: function (data) {
+                      }
+            });
+        }
+
+    }
+
+    function EnviaNotificacaoLider() {
+
+        // Envia a notificação do lider
+        var link = '@Url.Action("EnviaNotificacaoLider", "NotificacaoLider")';
+        var dado = {
+            id_notificacao: $('#lblid_notificacao').val(),
+            ds_lider_notificacao: $('#mensagemLider').val()
+        };
+
+          $.ajax({
+              url: link,
+              data: JSON.stringify(dado),
+                  type: 'POST',
+                  traditional: true,
+                  contentType: 'application/json',
+                  success: function (data) {
+                      window.location.href = '@Url.Action("Index", "NotificacaoLider")';
+                  }
+          });
+
+          $("#modalDadosNotificacao").modal('hide');
+
+      }
+
+</script>
