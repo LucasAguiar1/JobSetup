@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "F+PV+w/ruuLyeH/R2XyYpFYfreU5wdFcDR2+iF2C18NavjGhM0YIlf6QgDNv7TSluAMjgcLnMstP7S0k1eDgYQ==",
+  "dgSpecHash": "PMq3QbtT0H1TMk/sFskByubgO/BEUAt387iMZ5HlhSxgbjOK+OAmL/gP74cMqgQnyxoOdYnIqowFyEokGKrkUQ==",
   "success": true,
-  "projectFilePath": "C:\\Projetos\\JobSetup\\20201127_ATUAL\\BridgestoneLibras\\LHH.csproj",
+  "projectFilePath": "C:\\ProjetosManufatura\\JobSetup\\20201127_ATUAL\\BridgestoneLibras\\LHH.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aguiarlucas\\.nuget\\packages\\dotnetcore.npoi\\1.2.1\\dotnetcore.npoi.1.2.1.nupkg.sha512",
     "C:\\Users\\aguiarlucas\\.nuget\\packages\\dotnetcore.npoi.core\\1.2.1\\dotnetcore.npoi.core.1.2.1.nupkg.sha512",

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projetos\\JobSetup\\20201127_ATUAL\\BridgestoneLibras\\LHH.csproj": {}
+    "C:\\ProjetosManufatura\\JobSetup\\20201127_ATUAL\\BridgestoneLibras\\LHH.csproj": {}
   },
   "projects": {
-    "C:\\Projetos\\JobSetup\\20201127_ATUAL\\BridgestoneLibras\\LHH.csproj": {
+    "C:\\ProjetosManufatura\\JobSetup\\20201127_ATUAL\\BridgestoneLibras\\LHH.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projetos\\JobSetup\\20201127_ATUAL\\BridgestoneLibras\\LHH.csproj",
+        "projectUniqueName": "C:\\ProjetosManufatura\\JobSetup\\20201127_ATUAL\\BridgestoneLibras\\LHH.csproj",
         "projectName": "LHH",
-        "projectPath": "C:\\Projetos\\JobSetup\\20201127_ATUAL\\BridgestoneLibras\\LHH.csproj",
+        "projectPath": "C:\\ProjetosManufatura\\JobSetup\\20201127_ATUAL\\BridgestoneLibras\\LHH.csproj",
         "packagesPath": "C:\\Users\\aguiarlucas\\.nuget\\packages\\",
-        "outputPath": "C:\\Projetos\\JobSetup\\20201127_ATUAL\\BridgestoneLibras\\obj\\",
+        "outputPath": "C:\\ProjetosManufatura\\JobSetup\\20201127_ATUAL\\BridgestoneLibras\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\aguiarlucas\\AppData\\Roaming\\NuGet\\NuGet.Config",

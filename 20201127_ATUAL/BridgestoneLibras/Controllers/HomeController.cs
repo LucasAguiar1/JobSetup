@@ -37,7 +37,8 @@ namespace BridgestoneLibras.Controllers
 
         public IActionResult Login()
         {
-            HttpContext.Session.Clear();
+            HttpContext.Session.Clear();            
+
             return View();
         }
 
