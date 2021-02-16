@@ -14,6 +14,7 @@ using System.Linq;
 
 namespace LHH.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class MaquinaParteController : Controller
     {
         private readonly ApplicationDbSpecContext _db;
@@ -27,6 +28,14 @@ namespace LHH.Controllers
             _db = db;
             _log = log;
             _iconfiguration = iconfiguration;
+        }
+        public bool CheckSession()
+        {
+            if (HttpContext.Session.GetString("permissoes") == null)
+            {
+                return true;
+            }
+            return false;
         }
         public ActionResult Index()
         {
@@ -70,8 +79,18 @@ namespace LHH.Controllers
             TB_DEPARTAMENTO dp = new TB_DEPARTAMENTO();
             DepartamentoRepository repDepartamento = new DepartamentoRepository(_db);
 
-            var dados = repDepartamento.Consultar(dp).Where(x => x.status == 1).ToList();
-            return Json(repDepartamento.Combo(dados, "Selecione"));
+            List<TB_DEPARTAMENTO> listDeparts = new List<TB_DEPARTAMENTO>();
+
+            if (CheckSession())
+            {
+                RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                listDeparts = repDepartamento.Consultar(dp).Where(x => x.status == 1).ToList();
+            }
+
+            return Json(repDepartamento.Combo(listDeparts, "Selecione"));
         }
 
         public ActionResult Maquinas(int idDepartamento)

@@ -16,6 +16,7 @@ using System.IO;
 
 namespace BridgestoneLibras.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class DepartamentoController : Controller
     {
         private readonly ApplicationDbSpecContext _db;
@@ -34,8 +35,17 @@ namespace BridgestoneLibras.Controllers
             _log = log;
             _iconfiguration = iconfiguration;
         }
-        //Lucas
-         public ActionResult Index()
+
+        public bool CheckSession()
+        {
+            if (HttpContext.Session.GetString("permissoes") == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public ActionResult Index()
         {
             return View();
         }
@@ -43,7 +53,7 @@ namespace BridgestoneLibras.Controllers
         public ActionResult Cadastrar([FromBody]  TB_DEPARTAMENTO departamento)
         {
             DepartamentoRepository repDepartamento = new DepartamentoRepository(_db);
-            departamento.tipo = "C" ;
+            departamento.tipo = "C";
             departamento.idUsuario = HttpContext.Session.GetString("login") == "" ? "" : HttpContext.Session.GetString("login");
             departamento = repDepartamento.Cadatrar(departamento);
 
@@ -54,7 +64,7 @@ namespace BridgestoneLibras.Controllers
         {
 
             DepartamentoRepository repDepartamento = new DepartamentoRepository(_db);
-            departamento.tipo =  "A";
+            departamento.tipo = "A";
             departamento.idUsuario = HttpContext.Session.GetString("login") == "" ? "" : HttpContext.Session.GetString("login");
             departamento = repDepartamento.Alterar(departamento);
 
@@ -65,15 +75,24 @@ namespace BridgestoneLibras.Controllers
         {
             TB_DEPARTAMENTO dp = new TB_DEPARTAMENTO();
             DepartamentoRepository repDepartamento = new DepartamentoRepository(_db);
-            List<TB_DEPARTAMENTO> tbSetor = repDepartamento.Consultar(dp);
+            List<TB_DEPARTAMENTO> listDepartamentos = new List<TB_DEPARTAMENTO>();
 
-            return Json(repDepartamento.Consultar(dp));
+            if (CheckSession())
+            {
+                RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                listDepartamentos = repDepartamento.Consultar(dp);
+            }
+
+            return Json(listDepartamentos);
         }
 
-        public  ActionResult Status(TB_STATUS tb_status)
+        public ActionResult Status(TB_STATUS tb_status)
         {
             StatusRepository RepStatus = new StatusRepository(_db);
-            return Json( RepStatus.Combo(RepStatus.Consultar(tb_status), "Selecione"));
+            return Json(RepStatus.Combo(RepStatus.Consultar(tb_status), "Selecione"));
         }
     }
 }

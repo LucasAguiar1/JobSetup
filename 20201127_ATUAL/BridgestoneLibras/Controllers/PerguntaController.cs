@@ -20,6 +20,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace LHH.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class PerguntaController : Controller
     {
         private readonly ApplicationDbSpecContext _db;
@@ -36,7 +37,14 @@ namespace LHH.Controllers
             _iconfiguration = iconfiguration;
         }
 
-
+        public bool CheckSession()
+        {
+            if (HttpContext.Session.GetString("permissoes") == null)
+            {
+                return true;
+            }
+            return false;
+        }
 
         // GET: Pergunta
         public ActionResult Index()
@@ -85,8 +93,18 @@ namespace LHH.Controllers
             TB_DEPARTAMENTO departamentos = new TB_DEPARTAMENTO();
 
             DepartamentoRepository repDepartamento = new DepartamentoRepository(_db);
+            List<TB_DEPARTAMENTO> listDepartamentos = new List<TB_DEPARTAMENTO>();
 
-            return Json(repDepartamento.Combo(repDepartamento.Consultar(departamentos).Where(x=>x.status ==1).ToList(), "Selecione"));
+            if (CheckSession())
+            {
+                RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                listDepartamentos = repDepartamento.Consultar(departamentos).Where(x => x.status == 1).ToList();
+            }
+
+                return Json(repDepartamento.Combo(listDepartamentos, "Selecione"));
         }
 
         public ActionResult Maquinas(int idDepartamento)

@@ -15,6 +15,7 @@ using System.Linq;
 
 namespace LHH.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class NotificacaoLiderController : Controller
     {
         private readonly ApplicationDbSpecContext _db;
@@ -33,7 +34,15 @@ namespace LHH.Controllers
             _iconfiguration = iconfiguration;
         }
 
-        
+        public bool CheckSession()
+        {
+            if (HttpContext.Session.GetString("permissoes") == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public ActionResult Index()
         {
       
@@ -45,15 +54,23 @@ namespace LHH.Controllers
             TB_DEPARTAMENTO dp = new TB_DEPARTAMENTO();
             DepartamentoRepository repDepartamento = new DepartamentoRepository(_db);
             List<SelectListItem> combo = new List<SelectListItem>();
-            int departamento = Convert.ToInt32( HttpContext.Session.GetString("departamento"));
-            if (HttpContext.Session.GetString("permissoes") != "CADASTRAPERGUNTA")
-            {
 
-                combo = repDepartamento.Combo(repDepartamento.Consultar(dp).Where(x => x.codigo == departamento.ToString()).ToList(), "Selecione").ToList();
+            if (CheckSession())
+            {
+                RedirectToAction("Login", "Home");
             }
             else
             {
-                combo = repDepartamento.Combo(repDepartamento.Consultar(dp), "Selecione").ToList();
+                int departamento = Convert.ToInt32(HttpContext.Session.GetString("departamento"));
+                if (HttpContext.Session.GetString("permissoes") != "CADASTRAPERGUNTA")
+                {
+
+                    combo = repDepartamento.Combo(repDepartamento.Consultar(dp).Where(x => x.codigo == departamento.ToString()).ToList(), "Selecione").ToList();
+                }
+                else
+                {
+                    combo = repDepartamento.Combo(repDepartamento.Consultar(dp), "Selecione").ToList();
+                }
             }
             
 

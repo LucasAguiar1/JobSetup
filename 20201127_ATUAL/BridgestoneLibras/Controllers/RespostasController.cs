@@ -19,6 +19,7 @@ using System.Linq;
 
 namespace BridgestoneLibras.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class RespostasController : Controller
     {
         private readonly ApplicationDbSpecContext _db;
@@ -43,12 +44,31 @@ namespace BridgestoneLibras.Controllers
             return View();
         }
 
+        public bool CheckSession()
+        {
+            if (HttpContext.Session.GetString("permissoes") == null)
+            {
+                return true;
+            }
+            return false;
+        }
         public ActionResult Departamento()
         {
             TB_DEPARTAMENTO dp = new TB_DEPARTAMENTO();
             DepartamentoRepository repDepartamento = new DepartamentoRepository(_db);
 
-            return Json(repDepartamento.Combo(repDepartamento.Consultar(dp), "Selecione"));
+            List<TB_DEPARTAMENTO> listDepartamentos = new List<TB_DEPARTAMENTO>();
+
+            if (CheckSession())
+            {
+                RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                listDepartamentos = repDepartamento.Consultar(dp);
+            }
+
+            return Json(repDepartamento.Combo(listDepartamentos, "Selecione"));
         }
 
         public ActionResult Maquinas(int idDepartamento)

@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 
 namespace LHH.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class MaquinaController : Controller
     {
         private readonly ApplicationDbSpecContext _db;
@@ -34,6 +35,16 @@ namespace LHH.Controllers
             _log = log;
             _iconfiguration = iconfiguration;
         }
+
+        public bool CheckSession()
+        {
+            if (HttpContext.Session.GetString("permissoes") == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public ActionResult ConsultaGrid()
         {
             List<TB_DEPARTAMENTO> listDepartamento = new List<TB_DEPARTAMENTO>();
@@ -74,9 +85,19 @@ namespace LHH.Controllers
         {
             TB_DEPARTAMENTO dp = new TB_DEPARTAMENTO();
             DepartamentoRepository repDepartamento = new DepartamentoRepository(_db);
+            List<TB_DEPARTAMENTO> listDeps = new List<TB_DEPARTAMENTO>(); 
 
-            var dados = repDepartamento.Consultar(dp).Where(x => x.status == 1).ToList();
-            return Json(repDepartamento.Combo(dados, "Selecione"));
+            if (CheckSession())
+            {
+                RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                listDeps = repDepartamento.Consultar(dp).Where(x => x.status == 1).ToList();
+            }
+
+                
+            return Json(repDepartamento.Combo(listDeps, "Selecione"));
         }
 
         public ActionResult Status(TB_STATUS tb_status)

@@ -1,194 +1,197 @@
 ﻿<!DOCTYPE html>
 
-    <html>
-    <head>
-        <title>Notificação Líder</title>
-    </head>
+<script type="text/javascript">
+    window.history.forward();
+    function loadNoBack() {
+        window.history.forward();
+    }
+</script>
+<html>
+<head>
+    <title>Notificação Líder</title>
+</head>
+<body onload="loadNoBack();" onpageshow="if (event.persisted) loadNoBack();">
+    <ul class="breadcrumb" style="color:red">
+        <li>Notificação Líder</li>
+    </ul>
 
 
-
-    <body>
-        <ul class="breadcrumb" style="color:red">
-            <li>Notificação Líder</li>
-        </ul>
-
-
-        <div class="container">
-            <div class="row text-center" style="margin-top:20px;">
-                <div class="col-lg-3">
-                    <label>Departamento</label>
-                </div>
-                <div class="col-lg-2">
-                    <label>Maquina</label>
-                </div>
-                <div class="col-lg-2">
-                    <label>Parte Máquina</label>
-                </div>
-                <div class="col-lg-3">
-                    <label>Formulários</label>
-                </div>
-                <div class="col-lg-2">
-                    <label>Respondidas</label>
-                </div>
-                <div class="col-lg-2">
-
-                </div>
+    <div class="container">
+        <div class="row text-center" style="margin-top:20px;">
+            <div class="col-lg-3">
+                <label>Departamento</label>
+            </div>
+            <div class="col-lg-2">
+                <label>Maquina</label>
+            </div>
+            <div class="col-lg-2">
+                <label>Parte Máquina</label>
+            </div>
+            <div class="col-lg-3">
+                <label>Formulários</label>
+            </div>
+            <div class="col-lg-2">
+                <label>Respondidas</label>
+            </div>
+            <div class="col-lg-2">
 
             </div>
-            <div class="row">
-                <div class="col-lg-3">
-                    <select id="lstDepartamento" onchange="ComboMaquina();" name="departamento" class="form-control"></select>
-                </div>
-                <div class="col-lg-2">
-                    <select id="lstMaquina" onchange="ComboParteMaquina();" name="maquinas" class="form-control"></select>
-                </div>
-                <div class="col-lg-3">
-                    <select id="lstParteMaquina" onchange="ComboFormulario();" name="parteMaquina" class="form-control"></select>
-                </div>
-                <div class="col-lg-2">
-                    <select id="lstFormulario" name="recursoCentroCusto" class="form-control"></select>
-                </div>
-                <div class="col-lg-2 text-center">
-                    <div class="checkbox">
-                        <label><input id="chkResp" type="checkbox"></label>
-                    </div>
-                </div>
 
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <select id="lstDepartamento" onchange="ComboMaquina();" name="departamento" class="form-control"></select>
             </div>
-            <div class="row" style="margin-top: 16px;">
-                <div class="col-lg-4">
-                </div>
-                <div class="col-lg-2">
-                    <button type="button" id="btnConsultar" onclick="Consultar();" class="btn btn-outline-danger btn-block "><span style="color: black;" class="glyphicon glyphicon-search"></span></button>
-                </div>
-                <div class="col-lg-2">
-                    <button type="button" onclick="Limpar()" class="btn btn-outline-secondary  btn-block">Limpar</button>
-                </div>
-                <div class="col-lg-4">
-
+            <div class="col-lg-2">
+                <select id="lstMaquina" onchange="ComboParteMaquina();" name="maquinas" class="form-control"></select>
+            </div>
+            <div class="col-lg-3">
+                <select id="lstParteMaquina" onchange="ComboFormulario();" name="parteMaquina" class="form-control"></select>
+            </div>
+            <div class="col-lg-2">
+                <select id="lstFormulario" name="recursoCentroCusto" class="form-control"></select>
+            </div>
+            <div class="col-lg-2 text-center">
+                <div class="checkbox">
+                    <label><input id="chkResp" type="checkbox"></label>
                 </div>
             </div>
 
         </div>
+        <div class="row" style="margin-top: 16px;">
+            <div class="col-lg-4">
+            </div>
+            <div class="col-lg-2">
+                <button type="button" id="btnConsultar" onclick="Consultar();" class="btn btn-outline-danger btn-block "><span style="color: black;" class="glyphicon glyphicon-search"></span></button>
+            </div>
+            <div class="col-lg-2">
+                <button type="button" onclick="Limpar()" class="btn btn-outline-secondary  btn-block">Limpar</button>
+            </div>
+            <div class="col-lg-4">
 
-        <div class="modal fade" id="modalAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Informação</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="msnAlert"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin:auto; background-color: black;">Ok</button>
-                    </div>
-                </div>
             </div>
         </div>
 
+    </div>
 
-        <div class="modal fade" id="modalmsn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Informação</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="idmsn"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin:auto; background-color: black;">Ok</button>
-                    </div>
+    <div class="modal fade" id="modalAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Informação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="msnAlert"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin:auto; background-color: black;">Ok</button>
                 </div>
             </div>
         </div>
+    </div>
 
 
-        <div class="modal fade" id="ModalNotificacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Notificação Operador</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea2">Notificação</label>
-                            <textarea class="form-control rounded-0" id="idtxtNotificacaoObs" rows="5"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="btnReposnderNotificacao" data-dismiss="modal" class="btn btn-outline-danger  btn-block" onclick="ModalObsLider(this)" style="margin-top: 0px;">Responder Notificação</button>
-                        <button type="button" data-dismiss="modal" class="btn btn-outline-dark  btn-block" style="margin-top: 0px;">Fechar</button>
-                    </div>
+    <div class="modal fade" id="modalmsn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Informação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="idmsn"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin:auto; background-color: black;">Ok</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="ModalObsLider" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Notificação Lider</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="msnObsLider"></div>
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea2">Notificação</label>
-                            <textarea class="form-control rounded-0" onkeypress="LimparCampo();" id="idtxtObsLider" rows="5"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
 
-                        <button type="button" class="btn btn-outline-dark  btn-block" onclick="CadastrarObsLider();" style="margin-top: 0px;">Salvar</button>
-                        <button type="button" data-dismiss="modal" class="btn btn-outline-dark  btn-block" style="margin-top: 0px;">Fechar</button>
+    <div class="modal fade" id="ModalNotificacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Notificação Operador</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea2">Notificação</label>
+                        <textarea class="form-control rounded-0" id="idtxtNotificacaoObs" rows="5"></textarea>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnReposnderNotificacao" data-dismiss="modal" class="btn btn-outline-danger  btn-block" onclick="ModalObsLider(this)" style="margin-top: 0px;">Responder Notificação</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-outline-dark  btn-block" style="margin-top: 0px;">Fechar</button>
                 </div>
             </div>
         </div>
+    </div>
 
-
-        <div class="modal fade" id="ModalNotificacaoObsLider" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Notificação Lider</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+    <div class="modal fade" id="ModalObsLider" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Notificação Lider</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="msnObsLider"></div>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea2">Notificação</label>
+                        <textarea class="form-control rounded-0" onkeypress="LimparCampo();" id="idtxtObsLider" rows="5"></textarea>
                     </div>
-                    <div class="modal-body">
+                </div>
+                <div class="modal-footer">
 
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea2">Notificação</label>
-                            <textarea class="form-control rounded-0" id="idTxtNotificacaoObsLider" rows="5"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-
-                        <button type="button" data-dismiss="modal" class="btn btn-outline-dark  btn-block" style="margin-top: 0px;">Fechar</button>
-                    </div>
+                    <button type="button" class="btn btn-outline-dark  btn-block" onclick="CadastrarObsLider();" style="margin-top: 0px;">Salvar</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-outline-dark  btn-block" style="margin-top: 0px;">Fechar</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="container" style="margin-top:20px;">
-            <div id="conteudo"></div>
 
+    <div class="modal fade" id="ModalNotificacaoObsLider" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 136px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Notificação Lider</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea2">Notificação</label>
+                        <textarea class="form-control rounded-0" id="idTxtNotificacaoObsLider" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" data-dismiss="modal" class="btn btn-outline-dark  btn-block" style="margin-top: 0px;">Fechar</button>
+                </div>
+            </div>
         </div>
-    </body>
+    </div>
+
+    <div class="container" style="margin-top:20px;">
+        <div id="conteudo"></div>
+
+    </div>
+</body>
 </html>
 <style>
     .dtHorizontalExampleWrapper {

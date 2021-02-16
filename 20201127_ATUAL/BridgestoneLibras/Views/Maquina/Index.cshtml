@@ -1,11 +1,15 @@
-﻿
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
+<script type="text/javascript">
+    window.history.forward();
+    function loadNoBack() {
+        window.history.forward();
+    }
+</script>
 <html>
 <head>
     <title>Máquinas</title>
 </head>
-<body>
+<body onload="loadNoBack();" onpageshow="if (event.persisted) loadNoBack();">
     <ul class="breadcrumb" style="color:red">
         <li>Máquinas</li>
     </ul>
@@ -106,23 +110,23 @@
                 </div>
                 <div class="modal-body">
                     @*<div class="container">
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <label>Departamento</label>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <label>Departamento</label>
+                                </div>
+                                <div class="col-lg-3 text-center">
+                                    <label>Máquina</label>
+                                </div>
                             </div>
-                            <div class="col-lg-3 text-center">
-                                <label>Máquina</label>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <select id="lstDepartamentoPCS" name="departamento" onchange="ConsultarMaquinaspcs();" class="form-control"></select>
+                                </div>
+                                <div class="col-lg-3">
+                                    <select id="lstMaquinasPCS" name="departamento" class="form-control"></select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <select id="lstDepartamentoPCS" name="departamento" onchange="ConsultarMaquinaspcs();" class="form-control"></select>
-                            </div>
-                            <div class="col-lg-3">
-                                <select id="lstMaquinasPCS" name="departamento" class="form-control"></select>
-                            </div>
-                        </div>
-                    </div>*@
+                        </div>*@
 
                     @*<div id="msnAlert"></div>*@
                     <div id="gridPCS"></div>

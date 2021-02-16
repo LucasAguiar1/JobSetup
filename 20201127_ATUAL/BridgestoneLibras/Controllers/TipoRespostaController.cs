@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 
 namespace LHH.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class TipoRespostaController : Controller
     {
         private readonly ApplicationDbSpecContext _db;
@@ -33,15 +34,24 @@ namespace LHH.Controllers
             _log = log;
             _iconfiguration = iconfiguration;
         }
-       
+
+        public bool CheckSession()
+        {
+            if (HttpContext.Session.GetString("permissoes") == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public ActionResult Index()
-        {  
+        {
             return View();
         }
         public ActionResult ConsultaGrid()
         {
             TB_DescricaoMultiplaEscolha descricao = new TB_DescricaoMultiplaEscolha();
-            
+
             DescricaoMultiplaEscolhaRepository repDescricao = new DescricaoMultiplaEscolhaRepository(_db);
 
             return Json(repDescricao.Consultar(descricao));
@@ -50,7 +60,7 @@ namespace LHH.Controllers
         public ActionResult Status(TB_STATUS tb_status)
         {
             StatusRepository RepStatus = new StatusRepository(_db);
-            return Json(RepStatus.Combo(RepStatus.Consultar(tb_status), "Selecione").Where(x=>x.Value == "1").ToList());
+            return Json(RepStatus.Combo(RepStatus.Consultar(tb_status), "Selecione").Where(x => x.Value == "1").ToList());
         }
 
         public ActionResult Cadastrar([FromBody]  TB_DescricaoMultiplaEscolha myData)
@@ -78,9 +88,17 @@ namespace LHH.Controllers
         public ActionResult TiposRespostas(TB_TIPORESPOSTA tb_status)
         {
             TipoRespostaRepository RepTipo = new TipoRespostaRepository(_db);
+            List<TB_TIPORESPOSTA> listTipoResposta = new List<TB_TIPORESPOSTA>();
+            if (CheckSession())
+            {
+                RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                listTipoResposta = RepTipo.Consultar(tb_status).Where(x => x.id == 1).ToList();
+            }
 
-
-            return Json(RepTipo.Combo(RepTipo.Consultar(tb_status).Where(x => x.id == 1).ToList(), "Selecione"));
+            return Json(RepTipo.Combo(listTipoResposta, "Selecione"));
         }
     }
 }

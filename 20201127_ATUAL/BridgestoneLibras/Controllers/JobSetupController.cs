@@ -23,7 +23,7 @@ using System.Security.Cryptography;
 
 namespace BridgestoneLibras.Controllers
 {
-
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class JobSetupController : Controller
     {
         private readonly ApplicationDbSpecContext _db;
@@ -46,6 +46,15 @@ namespace BridgestoneLibras.Controllers
             _iconfiguration = iconfiguration;
         }
 
+        public bool CheckSession()
+        {
+            if (HttpContext.Session.GetString("permissoes") == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public ActionResult Index()
         {
 
@@ -59,7 +68,19 @@ namespace BridgestoneLibras.Controllers
             TB_DEPARTAMENTO dp = new TB_DEPARTAMENTO();
             DepartamentoRepository repDepartamento = new DepartamentoRepository(_db);
 
-            return Json(repDepartamento.Consultar(dp).Where(x => x.status == 1).ToList());
+            List<TB_DEPARTAMENTO> listDepartamentos = new List<TB_DEPARTAMENTO>();
+
+            if (CheckSession())
+            {
+                RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                listDepartamentos = repDepartamento.Consultar(dp).Where(x => x.status == 1).ToList();
+            }
+
+            return Json(listDepartamentos);
+
         }
 
         public ActionResult Maquinas(int idDepartamento)

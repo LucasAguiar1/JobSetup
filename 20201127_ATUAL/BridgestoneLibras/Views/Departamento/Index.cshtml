@@ -1,9 +1,15 @@
 ﻿<!DOCTYPE html>
+<script type="text/javascript">
+    window.history.forward();
+    function loadNoBack() {
+        window.history.forward();
+    }
+</script>
 <html>
 <head>
     <title>Departamento</title>
 </head>
-<body>
+<body onload="loadNoBack();" onpageshow="if (event.persisted) loadNoBack();">
     <ul class="breadcrumb" style="color:red">
         <li>Departamentos</li>
     </ul>
