@@ -458,6 +458,7 @@
             if (i == 0) {
                 html += "<th>Status</th>";
                 html += "<th>Data</th>";
+                html += "<th>Lote PCS</th>";
                 for (var c = 0; c < cabecalho; c++) {
 
 
@@ -488,6 +489,8 @@
                         }
 
                         html += "<td>" + dados[i][r].data + "</td>";
+
+                        html += "<td>" + dados[i][r].lotePCS + "</td>";
                     }
 
                     if (dados[i][r].id_tipoResposta == 1) {
@@ -498,8 +501,6 @@
                     else {
                         html += "<td>" + dados[i][r].valor + "</td>";
                     }
-
-
                 }
                 if (cabecalho != dados[i].length) {
                     html += "<td></td>";

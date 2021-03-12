@@ -227,6 +227,7 @@ namespace LHH.Data.Repository
                                 resp.idPreenchimento = Convert.ToInt32(result["idPreenchimento"]);
                                 resp.data =  Convert.ToDateTime(result["DataResposta"].ToString()).ToString("dd/MM/yyyy hh:mm:ss");
                                 resp.statusFormulario = result["statusFormulario"].ToString();
+                                resp.lotePCS = result["identificadoLote"].ToString();
                                 lRespostas.Add(resp);
 
 

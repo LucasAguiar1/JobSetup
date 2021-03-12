@@ -33,6 +33,7 @@ namespace BridgestoneLibras.ModelsEntity
         public DateTime dataFim { get; set; }
         public DateTime dataInicio { get; set; }
 
+        public string lotePCS { get; set; }
         public string data { get; set; }
 
         public int idPai { get; set; }

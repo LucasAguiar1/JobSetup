@@ -57,8 +57,6 @@ namespace BridgestoneLibras.Controllers
 
         public ActionResult Index()
         {
-
-
             return View();
         }
 
@@ -187,11 +185,6 @@ namespace BridgestoneLibras.Controllers
             //Cadatrar o lote na  tabela junto com o o id do preenchimneto. 
             IdentificadorLoteRepository identificador = new IdentificadorLoteRepository(_db);
 
-            //if (CadastrarIdentificadoLoteXidPreenchimento(p).Count.Equals(0))
-            //{
-            //    CadastrarIdentificadoLote(p);
-            //    vc_identificador_lote1 = "0";
-            //}
             p.idPreenchimento = idPreenchimento; 
             
             if (CadastrarIdentificadoLoteXidPreenchimento(p).Count.Equals(0)){
@@ -239,7 +232,6 @@ namespace BridgestoneLibras.Controllers
         public bool VerificaStatus(List<TB_RespPai> tb_resPai)
         {
             //Verifica se ja foi respondida alguma pergunta, caso tenha sido respondia o return é falso , assim será executada a opção de update.
-
 
             foreach (var item in tb_resPai)
             {
@@ -368,9 +360,6 @@ namespace BridgestoneLibras.Controllers
 
                 idPreenchimento = respostaPai.FirstOrDefault().idPreenchimento;
 
-
-
-
                 foreach (var item in perguntas)
                 {
                     if (item.id_tipoResposta.Equals(3))
@@ -399,16 +388,6 @@ namespace BridgestoneLibras.Controllers
                             item.valor = respostaPai.Where(x => x.id == Convert.ToInt32(item.id)).FirstOrDefault().valor.ToString();
                             item.chave = respostaPai.Where(x => x.id == Convert.ToInt32(item.id)).FirstOrDefault().chave;
 
-                            //Consulta os ids que estão na tabela resposta Pai, pois na tabela de perguntas as alternativas podem ser retiradas.
-                            //RespostaRepository respRepository = new RespostaRepository(_db);
-                            //TB_RespPai pergPai = new TB_RespPai();
-                            //pergPai.id_formulario = perguntas.FirstOrDefault().id_formulario;
-
-                            //if (respRepository.Consultar(pergPai).Where(x => x.id == item.id && x.Filho.Count == 0).ToList().Count > 0)
-                            //{
-                            //    item.idsAlternativa = respRepository.Consultar(pergPai).Where(x => x.id == item.id && x.Filho.Count == 0).FirstOrDefault().idsAlternativas;
-                            //    item.listDescricaoMultiplaEscolha = Alternativas(item.idsAlternativa).ToList();
-                            //}
                             TB_RespPai pergPai = new TB_RespPai();
                             pergPai.id_formulario = perguntas.FirstOrDefault().id_formulario;
                             var ids = ObterDescricaoMultiplaEscolhaNivelPai(pergPai, item);
@@ -448,34 +427,19 @@ namespace BridgestoneLibras.Controllers
                             }
                             if (f.id_tipoResposta.Equals(1))
                             {
-
-
                                 //Consulta os ids que estão na tabela resposta Pai, pois na tabela de perguntas as alternativas podem ser retiradas.
-                                //RespostaFilhoRepository repsFilho = new RespostaFilhoRepository(_db);
                                 TB_PERGUNTA perg = new TB_PERGUNTA();
                                 perg.id_formulario = perguntas.FirstOrDefault().id_formulario;
                                 perg.id = f.id_perguntaPai;
 
-                                //var ids = repsFilho.Consultar(perg).ToList();
-
-                                //if (ids.Count > 0)
-                                //{
-                                //    f.idsAlternativa = ids.FirstOrDefault().idsAlternativa;
-                                //    f.listDescricaoMultiplaEscolha = Alternativas(f.idsAlternativa).ToList();
-                                //}
-
-
                                 var ids = ObterDescricaoMultiplaEscolhaNivelFilho(perg, f);
                                 f.idsAlternativa = ids.idsAlternativa;
                                 f.listDescricaoMultiplaEscolha = Alternativas(ids.idsAlternativa).ToList();
-
-                                //f.listDescricaoMultiplaEscolha = Alternativas(f.idsAlternativa);
                             }
                         }
                     }
                 }
             }
-
 
             //Aqui retira as  perguntas que foram adicionadas após o inicio das respostas pelo operador.
 
@@ -496,96 +460,68 @@ namespace BridgestoneLibras.Controllers
 
             if (perguntas.Count > 0)
             {
-
                 IdentificadorLote(ref perguntas);
-
-
             }
             //Alternativas
-            foreach (var item in perguntas)
+            try
             {
-
-                if (item.id_tipoResposta.Equals(1))
+                foreach (var item in perguntas)
                 {
-                    if (item.idsAlternativa != "")
+
+                    if (item.id_tipoResposta.Equals(1))
                     {
-                        item.listDescricaoMultiplaEscolha = Alternativas(item.idsAlternativa).Where(x => x.status == 1).ToList();
-                    }
-
-                    ////Consulta os ids que estão na tabela resposta Pai, pois na tabela de perguntas as alternativas podem ser retiradas.
-                    ////RespostaRepository respRepository = new RespostaRepository(_db);
-                    //TB_RespPai pergPai = new TB_RespPai();
-                    //pergPai.id_formulario = idFormulario;
-
-                    ////if (respRepository.Consultar(pergPai).Where(x => x.id == item.id && x.Filho.Count == 0).ToList().Count > 0)
-                    ////{
-                    ////    item.idsAlternativa = respRepository.Consultar(pergPai).Where(x => x.id == item.id && x.Filho.Count == 0).FirstOrDefault().idsAlternativas;
-                    ////    item.listDescricaoMultiplaEscolha = Alternativas(item.idsAlternativa).ToList();
-                    ////}
-
-
-                    ////item.listDescricaoMultiplaEscolha  = ObterDescricaoMultiplaEscolhaNivelPai(pergPai, item);
-                    //var retPerguntaMultiplaEscolha = ObterDescricaoMultiplaEscolhaNivelPai(pergPai, item);
-
-                    //item.listDescricaoMultiplaEscolha = retPerguntaMultiplaEscolha.listDescricaoMultiplaEscolha.Where(x => x.status == 1).ToList();
-                    //item.idsAlternativa = retPerguntaMultiplaEscolha.idsAlternativa;
-
-
-                }
-                //Condição
-                if (item.id_tipoResposta.Equals(2))
-                {
-                    item.listFilhos = Condicao(item.id).Where(x => x.status == 1).ToList();
-
-                    foreach (var f in item.listFilhos)
-                    {
-                        if (f.id_tipoResposta.Equals(1))
+                        if (item.idsAlternativa != "")
                         {
+                            item.listDescricaoMultiplaEscolha = Alternativas(item.idsAlternativa).Where(x => x.status == 1).ToList();
+                        }
+                    }
+                    //Condição
+                    if (item.id_tipoResposta.Equals(2))
+                    {
+                        item.listFilhos = Condicao(item.id).Where(x => x.status == 1).ToList();
 
-                            //Consulta os ids que estão na tabela resposta Pai, pois na tabela de perguntas as alternativas podem ser retiradas.
-                            //RespostaFilhoRepository repsFilho = new RespostaFilhoRepository(_db);
-                            //TB_PERGUNTA perg = new TB_PERGUNTA();
-                            //perg.id_formulario = idFormulario;
-                            //perg.id = f.id_perguntaPai;
-
-                            //var ids = ObterDescricaoMultiplaEscolhaNivelFilho(perg, f);
-
-                            //f.idsAlternativa = ids.idsAlternativa;
-                            //f.listDescricaoMultiplaEscolha = Alternativas(ids.idsAlternativa).ToList();
-
-                            //f.listDescricaoMultiplaEscolha = Alternativas(f.idsAlternativa).ToList();
-
-                            if (f.idsAlternativa != "")
+                        foreach (var f in item.listFilhos)
+                        {
+                            if (f.id_tipoResposta.Equals(1))
                             {
-                                f.listDescricaoMultiplaEscolha = Alternativas(f.idsAlternativa).Where(x => x.status == 1).ToList();
+                                if (f.idsAlternativa != "")
+                                {
+                                    f.listDescricaoMultiplaEscolha = Alternativas(f.idsAlternativa).Where(x => x.status == 1).ToList();
+                                }
                             }
                         }
                     }
                 }
-            }
 
 
-            var copyListPerguntas = perguntas;
+                var copyListPerguntas = perguntas;
 
-            foreach (var item in copyListPerguntas)
-            {
-                foreach (var f in item.listFilhos)
+                foreach (var item in copyListPerguntas)
                 {
-                    perguntas = perguntas.Where(x => x.id != f.id_filho).ToList();
+                    foreach (var f in item.listFilhos)
+                    {
+                        perguntas = perguntas.Where(x => x.id != f.id_filho).ToList();
+                    }
                 }
+
+
+                //Nesse metodo verifico se a pergunta do tipo condição existe uma pergunta, caso não tenha retiro a pergunta condição do objeto
+                perguntas = VerificaPerguntaCondicao(ref perguntas);
+
+                if (perguntas.Count > 0)
+                {
+                    perguntas = populaObj(ref perguntas);
+                    AdiconaSelecione(ref perguntas);
+                }
+
+                return perguntas;
             }
-
-
-            //Nesse metodo verifico se a pergunta do tipo condição existe uma pergunta, caso não tenha retiro a pergunta condição do objeto
-            perguntas = VerificaPerguntaCondicao(ref perguntas);
-
-            if (perguntas.Count > 0)
+            catch (Exception EX)
             {
-                perguntas = populaObj(ref perguntas);
-                AdiconaSelecione(ref perguntas);
-            }
 
-            return perguntas;
+                throw EX;
+            }
+            
 
         }
 
@@ -612,18 +548,9 @@ namespace BridgestoneLibras.Controllers
                 if (item.id_tipoResposta.Equals(1))
                 {
                     //Consulta os ids que estão na tabela resposta Pai, pois na tabela de perguntas as alternativas podem ser retiradas.
-                    //RespostaRepository respRepository = new RespostaRepository(_db);
                     TB_RespPai pergPai = new TB_RespPai();
                     pergPai.id_formulario = idFormulario;
 
-                    //if (respRepository.Consultar(pergPai).Where(x => x.id == item.id && x.Filho.Count == 0).ToList().Count > 0)
-                    //{
-                    //    item.idsAlternativa = respRepository.Consultar(pergPai).Where(x => x.id == item.id && x.Filho.Count == 0).FirstOrDefault().idsAlternativas;
-                    //    item.listDescricaoMultiplaEscolha = Alternativas(item.idsAlternativa).ToList();
-                    //}
-
-
-                    //item.listDescricaoMultiplaEscolha  = ObterDescricaoMultiplaEscolhaNivelPai(pergPai, item);
                     var retPerguntaMultiplaEscolha = ObterDescricaoMultiplaEscolhaNivelPai(pergPai, item);
 
                     item.listDescricaoMultiplaEscolha = retPerguntaMultiplaEscolha.listDescricaoMultiplaEscolha;
@@ -638,9 +565,7 @@ namespace BridgestoneLibras.Controllers
                     {
                         if (f.id_tipoResposta.Equals(1))
                         {
-
                             //Consulta os ids que estão na tabela resposta Pai, pois na tabela de perguntas as alternativas podem ser retiradas.
-                            //RespostaFilhoRepository repsFilho = new RespostaFilhoRepository(_db);
                             TB_PERGUNTA perg = new TB_PERGUNTA();
                             perg.id_formulario = idFormulario;
                             perg.id = f.id_perguntaPai;
@@ -649,8 +574,6 @@ namespace BridgestoneLibras.Controllers
 
                             f.idsAlternativa = ids.idsAlternativa;
                             f.listDescricaoMultiplaEscolha = Alternativas(ids.idsAlternativa).ToList();
-
-                            //f.listDescricaoMultiplaEscolha = Alternativas(f.idsAlternativa).ToList();
                         }
                     }
                 }
@@ -669,7 +592,6 @@ namespace BridgestoneLibras.Controllers
 
 
             //Nesse metodo verifico se a pergunta do tipo condição existe uma pergunta, caso não tenha retiro a pergunta condição do objeto
-            //perguntas = VerificaPerguntaCondicao(ref perguntas);
 
             if (perguntas.Count > 0)
             {
@@ -727,8 +649,6 @@ namespace BridgestoneLibras.Controllers
         public TB_PERGUNTA ObterDescricaoMultiplaEscolhaNivelPai(TB_RespPai pergPai, TB_PERGUNTA item)
         {
             RespostaRepository respRepository = new RespostaRepository(_db);
-
-            //pergPai.id_formulario = idFormulario;
 
             if (respRepository.Consultar(pergPai).Where(x => x.id == item.id && x.Filho.Count == 0).ToList().Count > 0)
             {
@@ -801,31 +721,13 @@ namespace BridgestoneLibras.Controllers
         public ActionResult ConsultarListaUsuarios(int idDepartamento)
         {
             NotificacaoRepository notificacaoRepos = new NotificacaoRepository(_db);
-            //permissao = "LIDER";
-
+            
             DepartamentoRepository dep = new DepartamentoRepository(_db);
             TB_DEPARTAMENTO departamento = new TB_DEPARTAMENTO();
 
             var departamentos = dep.Consultar(departamento);
 
-            //var aa = HttpContext.Session.GetString("login");
-            //HttpContext.Session.SetString("usuario", usuarioModel.nm_usuario.Trim());
-            //HttpContext.Session.SetString("departamento", Convert.ToString(usuarioModel.id_departamento));
-            //var aaa = HttpContext.Session.GetString("permissoes");
-
-            //var  lPermissoes = JsonConvert.DeserializeObject<List<UsuarioFuncao>>(HttpContext.Session.GetString("permissoes"));
-
-            //if(lPermissoes.Count == 3)
-            //{
-            //    permissao = "LIDER"; 
-            //}
-
             return Json(notificacaoRepos.Combo(notificacaoRepos.ConsultarListaUsuarios(departamentos.Where(x => x.id == idDepartamento).FirstOrDefault().codigo), "Selecione"));
-            //return Json(dados);
         }
-
-
-
-
     }
 }
