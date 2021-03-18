@@ -128,5 +128,44 @@ namespace LHH.Controllers
 
             return Json(myData);
         }
+
+        public ActionResult Pesquisar([FromBody]  TB_MAQUINA myData)
+        {
+            MaquinaRepository repMaquina = new MaquinaRepository(_db);
+            List<TB_MAQUINA> listDeps = new List<TB_MAQUINA>();
+
+            listDeps = repMaquina.Consultar().ToList();
+
+            bool consulta = false;
+
+            if (myData.id_departamento != 0 && (myData.nome == null || myData.nome == "") && myData.vc_Descripcion == null && myData.status == 0)
+            {
+                listDeps = listDeps.Where(x => x.id_departamento == myData.id_departamento).ToList();
+                consulta = true;
+            }
+
+            if (myData.id_departamento != 0 && myData.nome != null && myData.vc_Descripcion == null && myData.status == 0)
+            {
+                listDeps = listDeps.Where(x => x.id_departamento == myData.id_departamento && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim())).ToList();
+                consulta = true;
+            }
+
+            if (myData.id_departamento != 0 && myData.nome != null && myData.vc_Descripcion != null && myData.status == 0)
+            {
+                listDeps = listDeps.Where(x => x.id_departamento == myData.id_departamento && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim()) && x.vc_Descripcion.ToUpper().Contains(myData.vc_Descripcion.ToUpper().Trim())).ToList();
+                consulta = true;
+            }
+
+            if (myData.id_departamento != 0 && myData.nome != null && myData.vc_Descripcion != null && myData.status != 0)
+            {
+                listDeps = listDeps.Where(x => x.id_departamento == myData.id_departamento && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim()) && x.vc_Descripcion.ToUpper().Contains(myData.vc_Descripcion.ToUpper().Trim()) && myData.status != 0).ToList();
+                consulta = true;
+            }
+            if (!consulta)
+            {
+                listDeps = new List<TB_MAQUINA>();
+            }
+            return Json(listDeps);
+        }
     }
 }

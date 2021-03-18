@@ -355,7 +355,7 @@ namespace LHH.Data.Repository
                                 tbPergunta.i_Pk_Maquina = result["i_Pk_Maquina"].ToString() == "" ? "0" : result["i_Pk_Maquina"].ToString() == null ? "" : result["i_Pk_Maquina"].ToString() ;
                                 tbPergunta.vc_Descripcion = result["vc_Descripcion"].ToString() == null ? "" : result["vc_Descripcion"].ToString();
                                 tbPergunta.codigoTess = result["codigoTess"].ToString() == null ? "" : result["codigoTess"].ToString();
-                                tbPergunta.idpreenchimento = result["idpreenchimento"].ToString() == "" ? 0 :  Convert.ToInt32( result["idpreenchimento"].ToString());
+                               // tbPergunta.idpreenchimento = result["idpreenchimento"].ToString() == "" ? 0 :  Convert.ToInt32( result["idpreenchimento"].ToString());
                                 tbPergunta.identificadorLote = result["IDENTIFICADOLOTE"].ToString() == null ? "" : result["IDENTIFICADOLOTE"].ToString();
 
                                 lPerguntas.Add(tbPergunta);

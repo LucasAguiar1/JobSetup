@@ -151,10 +151,10 @@ C:\Projetos\JobSetup\20201127_ATUAL\BridgestoneLibras\obj\Debug\netcoreapp2.1\LH
 C:\Projetos\JobSetup\20201127_ATUAL\BridgestoneLibras\obj\Debug\netcoreapp2.1\LHH.genruntimeconfig.cache
 C:\Projetos\JobSetup\20201127_ATUAL\BridgestoneLibras\obj\Debug\netcoreapp2.1\LHH.csproj.CopyComplete
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcoreapp2.1\appsettings.Development.json
+C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcoreapp2.1\appsettings.json
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcoreapp2.1\libman.json
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcoreapp2.1\Properties\launchSettings.json
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcoreapp2.1\Properties\ServiceDependencies\BridgeLHH - Web Deploy\profile.arm.json
-C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcoreapp2.1\appsettings.json
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcoreapp2.1\LHH.deps.json
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcoreapp2.1\LHH.runtimeconfig.json
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcoreapp2.1\LHH.runtimeconfig.dev.json
@@ -162,7 +162,6 @@ C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcor
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcoreapp2.1\LHH.pdb
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcoreapp2.1\LHH.Views.dll
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\bin\Debug\netcoreapp2.1\LHH.Views.pdb
-C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\obj\Debug\netcoreapp2.1\LHH.csprojAssemblyReference.cache
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\obj\Debug\netcoreapp2.1\LHH.csproj.CoreCompileInputs.cache
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\obj\Debug\netcoreapp2.1\LHH.RazorAssemblyInfo.cache
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\obj\Debug\netcoreapp2.1\LHH.RazorAssemblyInfo.cs
@@ -201,3 +200,4 @@ C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\obj\Debug\netcor
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\obj\Debug\netcoreapp2.1\LHH.pdb
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\obj\Debug\netcoreapp2.1\LHH.genruntimeconfig.cache
 C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\obj\Debug\netcoreapp2.1\LHH.csproj.CopyComplete
+C:\ProjetosManufatura\JobSetup\20201127_ATUAL\BridgestoneLibras\obj\Debug\netcoreapp2.1\LHH.csprojAssemblyReference.cache

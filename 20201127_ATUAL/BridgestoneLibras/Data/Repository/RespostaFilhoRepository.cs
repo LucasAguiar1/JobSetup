@@ -130,7 +130,7 @@ namespace LHH.Data.Repository
                         command.Parameters.Add(new SqlParameter("@idUsuario", itemPai.idUsuario));
                         command.Parameters.Add(new SqlParameter("@nomeUsuario", itemPai.nomeUsuario));
                         command.Parameters.Add(new SqlParameter("@idPreenchimento", itemPai.idPreenchimento));
-                        command.Parameters.Add(new SqlParameter("@idsAlternativa", itemPai.idsAlternativas));
+                        command.Parameters.Add(new SqlParameter("@idsAlternativa", itemPai.idsAlternativas == null ? "" : itemPai.idsAlternativas));
                         
                         command.Parameters.Add(new SqlParameter("@idRetorno", filho.idRetorno) { Size = 200, Direction = ParameterDirection.Output });
 

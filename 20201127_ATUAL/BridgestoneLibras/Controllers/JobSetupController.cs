@@ -177,7 +177,19 @@ namespace BridgestoneLibras.Controllers
                     {
                         if (itemPai.Filho.Count > 0)
                         {
-                            respostaFilhoRep.Alterar(itemPai.Filho, itemPai);
+                            foreach (var item in itemPai.Filho)
+                            {
+                                if (item.chave != 0)
+                                {
+                                    respostaFilhoRep.Alterar(itemPai.Filho, itemPai);
+                                }
+                                else
+                                {
+                                    respostaFilhoRep.Cadastrar(itemPai.Filho, itemPai);
+                                }
+                            }
+
+                            
                         }
                     }
                 }

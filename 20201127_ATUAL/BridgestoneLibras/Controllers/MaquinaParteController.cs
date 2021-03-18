@@ -73,6 +73,41 @@ namespace LHH.Controllers
 
             return Json(maquinasParte);
         }
+        public ActionResult Pesquisar([FromBody]  TB_MAQUINAPARTE myData)
+        {
+            List<TB_MAQUINAPARTE> listMaquinaParte = new List<TB_MAQUINAPARTE>();
+            MaquinaParteRepository repMaquinaParte = new MaquinaParteRepository(_db);
+            TB_MAQUINAPARTE dp = new TB_MAQUINAPARTE();
+            listMaquinaParte = repMaquinaParte.Consultar(dp).ToList();
+            bool consulta = false;
+
+            if (myData.id_departamento != 0 && myData.id_maquina == 0 && (myData.nome == null || myData.nome == "") && myData.status == 0)
+            {
+                listMaquinaParte = listMaquinaParte.Where(x => x.id_departamento == myData.id_departamento).ToList();
+                consulta = true;
+            }
+            if (myData.id_departamento != 0 && myData.id_maquina != 0 && myData.nome == null && myData.status == 0)
+            {
+                listMaquinaParte = listMaquinaParte.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina).ToList();
+                consulta = true;
+            }
+            if (myData.id_departamento != 0 && myData.id_maquina != 0 && myData.nome != null  && myData.status == 0)
+            {
+                listMaquinaParte = listMaquinaParte.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim())).ToList();
+                consulta = true;
+            }
+            if (myData.id_departamento != 0 && myData.id_maquina != 0 && (myData.nome != null || myData.nome != "") && myData.status != 0)
+            {
+                listMaquinaParte = listMaquinaParte.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim()) && x.status == myData.status).ToList();
+                consulta = true;
+            }
+           
+            if (!consulta)
+            {
+                listMaquinaParte = new List<TB_MAQUINAPARTE>();
+            }
+            return Json(listMaquinaParte);
+        }
 
         public ActionResult Departamento()
         {

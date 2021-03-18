@@ -59,7 +59,7 @@ namespace LHH.Controllers
             PerguntaRepository repPergunta = new PerguntaRepository(_db);
             CaracterSpecial(ref myData);
             myData.tipo = "C";
-            myData.idUsuario =  HttpContext.Session.GetString("login") == "" ? "" : HttpContext.Session.GetString("login");
+            myData.idUsuario = HttpContext.Session.GetString("login") == "" ? "" : HttpContext.Session.GetString("login");
             myData = repPergunta.Cadastrar(myData);
 
             return Json(myData);
@@ -104,7 +104,7 @@ namespace LHH.Controllers
                 listDepartamentos = repDepartamento.Consultar(departamentos).Where(x => x.status == 1).ToList();
             }
 
-                return Json(repDepartamento.Combo(listDepartamentos, "Selecione"));
+            return Json(repDepartamento.Combo(listDepartamentos, "Selecione"));
         }
 
         public ActionResult Maquinas(int idDepartamento)
@@ -121,8 +121,8 @@ namespace LHH.Controllers
             TB_MAQUINAPARTE parte = new TB_MAQUINAPARTE();
             parte.id_maquina = idMaquina;
             MaquinaParteRepository repMaquina = new MaquinaParteRepository(_db);
-            
-            if(idMaquina == 0)
+
+            if (idMaquina == 0)
             {
                 List<TB_MAQUINAPARTE> list = new List<TB_MAQUINAPARTE>();
                 return Json(repMaquina.Combo(list, "Selecione"));
@@ -143,7 +143,7 @@ namespace LHH.Controllers
             f.id_parteMaquina = idParteMaquina;
             FormularioRepository RepForm = new FormularioRepository(_db);
             List<TB_FORMULARIO> list = new List<TB_FORMULARIO>();
-            if(idParteMaquina == 0)
+            if (idParteMaquina == 0)
             {
                 return Json(RepForm.Combo(list, "Selecione"));
             }
@@ -164,6 +164,53 @@ namespace LHH.Controllers
             var listPergunta = repPergunta.Consultar(pergunta);
             return Json(listPergunta);
         }
+
+
+        public ActionResult Pesquisar([FromBody]  TB_PERGUNTA myData)
+        {
+            TB_PERGUNTA pergunta = new TB_PERGUNTA();
+            PerguntaRepository repPergunta = new PerguntaRepository(_db);
+            pergunta.id_formulario = myData.id_formulario;
+            var listPergunta = repPergunta.Consultar(pergunta);
+            bool consulta = false;
+
+            if (myData.id_tess != 0 && myData.id_obrigatorio == 0 && myData.nome == null && myData.id_tipoResposta == 0 && myData.status == 0)
+            {
+                listPergunta = listPergunta.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina && x.id_parteMaquina == myData.id_parteMaquina && x.id_formulario == myData.id_formulario && x.id_tess == myData.id_tess).ToList();
+                consulta = true;
+            }
+
+            if (myData.id_tess != 0 && myData.id_obrigatorio != 0 && myData.nome == null && myData.id_tipoResposta == 0 && myData.status == 0)
+            {
+                listPergunta = listPergunta.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina && x.id_parteMaquina == myData.id_parteMaquina && x.id_formulario == myData.id_formulario && x.id_tess == myData.id_tess && x.id_obrigatorio == myData.id_obrigatorio).ToList();
+                consulta = true;
+            }
+
+            if (myData.id_tess != 0 && myData.id_obrigatorio != 0 && myData.nome != null && myData.id_tipoResposta == 0 && myData.status == 0)
+            {
+                listPergunta = listPergunta.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina && x.id_parteMaquina == myData.id_parteMaquina && x.id_formulario == myData.id_formulario && x.id_tess == myData.id_tess && x.id_obrigatorio == myData.id_obrigatorio && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim())).ToList();
+                consulta = true;
+            }
+
+            if (myData.id_tess != 0 && myData.id_obrigatorio != 0 && myData.nome != null && myData.id_tipoResposta != 0 && myData.status == 0)
+            {
+                listPergunta = listPergunta.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina && x.id_parteMaquina == myData.id_parteMaquina && x.id_formulario == myData.id_formulario && x.id_tess == myData.id_tess && x.id_obrigatorio == myData.id_obrigatorio && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim()) && x.id_tipoResposta == myData.id_tipoResposta).ToList();
+                consulta = true;
+            }
+
+            if (myData.id_tess != 0 && myData.id_obrigatorio != 0 && myData.nome != null && myData.id_tipoResposta != 0 && myData.status != 0)
+            {
+                listPergunta = listPergunta.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina && x.id_parteMaquina == myData.id_parteMaquina && x.id_formulario == myData.id_formulario && x.id_tess == myData.id_tess && x.id_obrigatorio == myData.id_obrigatorio && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim()) && x.id_tipoResposta == myData.id_tipoResposta && x.status == myData.status).ToList();
+                consulta = true;
+            }
+            
+            if (!consulta)
+            {
+                listPergunta = new List<TB_PERGUNTA>();
+            }
+            return Json(listPergunta);
+        }
+
         public ActionResult PerguntaPai(int id_pai, int idformulario)
         {
 

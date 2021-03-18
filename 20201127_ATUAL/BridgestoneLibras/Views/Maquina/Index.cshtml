@@ -378,51 +378,85 @@
 
 
     function Pesquisar() {
-        if (!validarCamposPesquisa()) {
+        if (populaCampos()) {
+            eval('var myData = {"' + dadosCadastro + '"}');
+
+            $.ajax({
+                url: "Pesquisar/Departamento",
+                data: JSON.stringify(myData),
+                type: 'POST',
+                traditional: true,
+                contentType: 'application/json',
+                success: function (data) {
+                    dadosCadastro = "";
+                    CarregaGrid(data);
+
+                    //ModalAlert(data.msn);
+                }
+            });
+        }
+
+        //var cont = 0;
+        //dadosRetorno = new Array();
+
+        //if ($("#lstDepartamento").val() != "0" && $("#idNomeMaquina").val() == "") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].id_departamento == $("#lstDepartamento").val()) {
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+
+        //if ($("#lstDepartamento").val() == "0" && $("#idNomeMaquina").val() != "") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].nome.trim().toUpperCase() == $("#idNomeMaquina").val().trim().toUpperCase()) {
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+
+        //if ($("#lstDepartamento").val() != "0" && $("#idNomeMaquina").val() != "") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].nome.trim().toUpperCase() == $("#idNomeMaquina").val().trim().toUpperCase() && copyData[i].id_departamento == $("#lstDepartamento").val()) {
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+    }
+
+    function populaCampos() {
+        if ($("#lstDepartamento").val() == "0") {
+            ModalAlert("Por favor, informe o Departamento.");
             return false;
         }
+        dadosCadastro = "id_departamento" + '":"' + $("#lstDepartamento").val();
 
-        var cont = 0;
-        dadosRetorno = new Array();
-
-        if ($("#lstDepartamento").val() != "0" && $("#idNomeMaquina").val() == "") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].id_departamento == $("#lstDepartamento").val()) {
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
+        if ($("#idNomeMaquina").val() != "") {
+            dadosCadastro += '","' + "nome" + '":"' + $("#idNomeMaquina").val();
+        }
+        if ($("#idDescricaoPCS").val() != "") {
+            dadosCadastro += '","' + "vc_Descripcion" + '":"' + $("#idDescricaoPCS").val();
+        }
+        if ($("#lstStatus").val() != "0") {
+            dadosCadastro += '","' + "status" + '":"' + caracterSpecial($("#lstStatus").val());
         }
 
-        if ($("#lstDepartamento").val() == "0" && $("#idNomeMaquina").val() != "") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].nome.trim().toUpperCase() == $("#idNomeMaquina").val().trim().toUpperCase()) {
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
-        }
-
-        if ($("#lstDepartamento").val() != "0" && $("#idNomeMaquina").val() != "") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].nome.trim().toUpperCase() == $("#idNomeMaquina").val().trim().toUpperCase() && copyData[i].id_departamento == $("#lstDepartamento").val()) {
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
-        }
+        return true;
     }
 
     function ObjetoConsulta(obj, i, cont) {

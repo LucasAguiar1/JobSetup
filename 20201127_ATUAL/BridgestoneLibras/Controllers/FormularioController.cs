@@ -50,48 +50,59 @@ namespace LHH.Controllers
         {
             List<TB_FORMULARIO> listFomrulario = new List<TB_FORMULARIO>();
             FormularioRepository repFormulario = new FormularioRepository(_db);
+            bool consulta = false;
 
             listFomrulario = repFormulario.Consultar();
 
             if(myData.id_departamento != 0  && myData.id_maquina != 0 && myData.id_parteMaquina != 0 && myData.nome != null && myData.status != 0)
             {
                 listFomrulario = listFomrulario.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina && x.id_parteMaquina == myData.id_parteMaquina && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim()) && x.status == myData.status ).ToList();
+                consulta = true;
             }
 
             if (myData.id_departamento != 0 && myData.id_maquina != 0 && myData.id_parteMaquina != 0 && myData.nome != null && myData.status == 0)
             {
                 listFomrulario = listFomrulario.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina && x.id_parteMaquina == myData.id_parteMaquina && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim())).ToList();
+                consulta = true;
             }
 
             if (myData.id_departamento != 0 && myData.id_maquina != 0 && myData.id_parteMaquina != 0 && myData.nome == null && myData.status == 0)
             {
                 listFomrulario = listFomrulario.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina).ToList();
+                consulta = true;
             }
 
 
             if (myData.id_departamento != 0 && myData.id_maquina != 0 && myData.id_parteMaquina == 0 && myData.nome == null )
             {
                 listFomrulario = listFomrulario.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina ).ToList();
+                consulta = true;
             }
 
             if (myData.id_departamento != 0 && myData.id_maquina == 0 && myData.id_parteMaquina == 0 && myData.nome == null)
             {
                 listFomrulario = listFomrulario.Where(x => x.id_departamento == myData.id_departamento).ToList();
+                consulta = true;
             }
 
             if (myData.id_departamento != 0  && myData.nome != null && myData.id_maquina == 0 && myData.id_parteMaquina == 0)
             {
-                listFomrulario = listFomrulario.Where(x => x.id_departamento == myData.id_departamento && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim())).ToList(); 
+                listFomrulario = listFomrulario.Where(x => x.id_departamento == myData.id_departamento && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim())).ToList();
+                consulta = true;
                 //listFomrulario = listFomrulario.Where(x => x.id_departamento == myData.id_departamento ).ToList();
             }
 
             if (myData.id_departamento != 0  && myData.status != 0)
             {
                 listFomrulario = listFomrulario.Where(x => x.id_departamento == myData.id_departamento && x.status == myData.status).ToList();
+                consulta = true;
             }
 
 
-
+            if (!consulta)
+            {
+                listFomrulario = new List<TB_FORMULARIO>();
+            }
 
             Formulario_OrdemRepository FormOrdemRepos = new Formulario_OrdemRepository(_db);
             TB_ORDEM_FORMULARIO ordemFormulario = new TB_ORDEM_FORMULARIO();

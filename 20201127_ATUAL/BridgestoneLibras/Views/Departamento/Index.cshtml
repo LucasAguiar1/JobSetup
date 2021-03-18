@@ -226,52 +226,90 @@
     }
 
     function Pesquisar() {
+        if (populaCampos()) {
+            eval('var myData = {"' + dadosCadastro + '"}');
 
-        if (!ParametrosPesquisa()) {
+            $.ajax({
+                url: "Pesquisar/Departamento",
+                data: JSON.stringify(myData),
+                type: 'POST',
+                traditional: true,
+                contentType: 'application/json',
+                success: function (data) {
+                    dadosCadastro = "";
+                    CarregaGrid(data);
+
+                    //ModalAlert(data.msn);
+                }
+            });
+        }
+
+
+
+
+        //if (!ParametrosPesquisa()) {
+        //    return false;
+        //}
+
+        //var cont = 0;
+        //dadosRetorno = new Array();
+
+        //if ($("#idCodDepartamento").val() != "" && $("#idDepartamento").val() == "" && $("#lstStatus").val() == "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].codigo == $("#idCodDepartamento").val().trim().toUpperCase() && $("#idDepartamento").val() == "" && $("#lstStatus").val() == "0") {
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno);
+        //        return;
+        //    }
+        //}
+
+        //if ($("#idCodDepartamento").val() != "" && $("#idDepartamento").val() != "" && $("#lstStatus").val() == "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].codigo == $("#idCodDepartamento").val().trim().toUpperCase() && copyData[i].nome.trim().toUpperCase() == $("#idDepartamento").val().trim().toUpperCase()) {
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno);
+        //        return;
+        //    }
+        //}
+        //if ($("#idCodDepartamento").val() != "" && $("#idDepartamento").val() != "" && $("#lstStatus").val() != "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].codigo == $("#idCodDepartamento").val().trim().toUpperCase() && copyData[i].nome.trim().toUpperCase() == $("#idDepartamento").val().trim().toUpperCase() && copyData[i].status == $("#lstStatus").val()) {
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno);
+        //        return;
+        //    }
+        //}
+    
+    }
+
+    function populaCampos() {
+        if ($("#idCodDepartamento").val() == "") {
+            ModalAlert("Por favor, informe o Departamento.");
             return false;
         }
+        dadosCadastro = "id" + '":"' + $("#idCodDepartamento").val();
 
-        var cont = 0;
-        dadosRetorno = new Array();
-
-        if ($("#idCodDepartamento").val() != "" && $("#idDepartamento").val() == "" && $("#lstStatus").val() == "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].codigo == $("#idCodDepartamento").val().trim().toUpperCase() && $("#idDepartamento").val() == "" && $("#lstStatus").val() == "0") {
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno);
-                return;
-            }
+        if ($("#idDepartamento").val() != "") {
+            dadosCadastro += '","' + "nome" + '":"' + $("#idDepartamento").val();
         }
 
-        if ($("#idCodDepartamento").val() != "" && $("#idDepartamento").val() != "" && $("#lstStatus").val() == "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].codigo == $("#idCodDepartamento").val().trim().toUpperCase() && copyData[i].nome.trim().toUpperCase() == $("#idDepartamento").val().trim().toUpperCase()) {
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno);
-                return;
-            }
+        if ($("#lstStatus").val() != "0") {
+            dadosCadastro += '","' + "status" + '":"' + caracterSpecial($("#lstStatus").val());
         }
-        if ($("#idCodDepartamento").val() != "" && $("#idDepartamento").val() != "" && $("#lstStatus").val() != "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].codigo == $("#idCodDepartamento").val().trim().toUpperCase() && copyData[i].nome.trim().toUpperCase() == $("#idDepartamento").val().trim().toUpperCase() && copyData[i].status == $("#lstStatus").val()) {
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno);
-                return;
-            }
-        }
-    
+
+        return true;
     }
 
 

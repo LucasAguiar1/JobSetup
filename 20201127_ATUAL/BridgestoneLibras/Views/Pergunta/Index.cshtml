@@ -1290,12 +1290,31 @@
 
     function validarCamposPesquisa() {
 
-        if ($("#lstDepartamento").val() == "0" && $("#lstMaquina").val() == "0" && $("#llstParteMaquina").val() == "0" && $("#lstFormulario").val() == "0" && $("#lstVerificacaoTess").val() == "0" && $("#lstObrigatorio").val() == "0" && $("#idDescricaoPergunta").val() == "" && $("#idtxtNumeroOrdem").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
+        //if ($("#lstDepartamento").val() == "0" && $("#lstMaquina").val() == "0" && $("#llstParteMaquina").val() == "0" && $("#lstFormulario").val() == "0" && $("#lstVerificacaoTess").val() == "0" && $("#lstObrigatorio").val() == "0" && $("#idDescricaoPergunta").val() == "" && $("#idtxtNumeroOrdem").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
+        //    ModalAlert("Por favor, informe um parametro para a consulta.");
+        //    return false;
+        //}
 
-            //if ($("#lstDepartamento").val() == "0" && ($("#lstMaquina").val() == "0" || $("#lstMaquina").val() == null) ) {
-            ModalAlert("Por favor, informe um parametro para a consulta.");
+        if ($("#lstDepartamento").val() == "0") {
+            ModalAlert("Por favor, selecione o Departamento.");
             return false;
         }
+
+        if ($("#lstMaquina").val() == "0") {
+            ModalAlert("Por favor, selecione a Máquinna.");
+            return false;
+        }
+        if ($("#llstParteMaquina").val() == "0") {
+            ModalAlert("Por favor, selecione a Parte Máquina.");
+            return false;
+        }
+
+        if ($("#lstFormulario").val() == "0") {
+            ModalAlert("Por favor, selecione o  Formulário.");
+            return false;
+        }
+
+        
         return true;
     }
 
@@ -1303,151 +1322,208 @@
         if (!validarCamposPesquisa()) {
             return false;
         }
-        var cont = 0;
-        dadosRetorno = new Array();
 
-        if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() == "0" && $("#llstParteMaquina").val() == "0" && $("#lstFormulario").val() == "0" && $("#lstVerificacaoTess").val() == "0" && $("#lstObrigatorio").val() == "0" && $("#idDescricaoPergunta").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].id_departamento == $("#lstDepartamento").val()) {
+        populaCampos(); 
+        eval('var myData = {"' + dadosCadastro + '"}');
 
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
+        $.ajax({
+            url: "Pesquisar/Pergunta",
+            data: JSON.stringify(myData),
+            type: 'POST',
+            traditional: true,
+            contentType: 'application/json',
+            success: function (data) {
+                dadosCadastro = "";
+                CarregaGrid(data);
+
+                //ModalAlert(data.msn);
             }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
+        });
+        //var cont = 0;
+        //dadosRetorno = new Array();
+
+        //if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() == "0" && $("#llstParteMaquina").val() == "0" && $("#lstFormulario").val() == "0" && $("#lstVerificacaoTess").val() == "0" && $("#lstObrigatorio").val() == "0" && $("#idDescricaoPergunta").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].id_departamento == $("#lstDepartamento").val()) {
+
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+
+        //if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() == "0" && $("#lstFormulario").val() == "0" && $("#lstVerificacaoTess").val() == "0" && $("#lstObrigatorio").val() == "0" && $("#idDescricaoPergunta").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val()) {
+
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+
+        //if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() == "0" && $("#lstVerificacaoTess").val() == "0" && $("#lstObrigatorio").val() == "0" && $("#idDescricaoPergunta").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val()) {
+
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+
+        //if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() == "0" && $("#lstObrigatorio").val() == "0" && $("#idDescricaoPergunta").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val()) {
+
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+
+        //if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() != "0" && $("#lstObrigatorio").val() == "0" && $("#idDescricaoPergunta").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val() && copyData[i].id_tess == $("#lstVerificacaoTess").val()) {
+
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+
+        //if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() != "0" && $("#lstObrigatorio").val() != "0" && $("#idDescricaoPergunta").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val() && copyData[i].id_tess == $("#lstVerificacaoTess").val() && copyData[i].id_obrigatorio == $("#lstObrigatorio").val()) {
+
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+
+        //if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() != "0" && $("#lstObrigatorio").val() != "0" && $("#idDescricaoPergunta").val() != "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val() && copyData[i].id_tess == $("#lstVerificacaoTess").val() && copyData[i].id_obrigatorio == $("#lstObrigatorio").val() && copyData[i].nome.trim().toUpperCase() == $("#idDescricaoPergunta").val().trim().toUpperCase()) {
+
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+
+        //if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() != "0" && $("#lstObrigatorio").val() != "0" && $("#idDescricaoPergunta").val() != "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val() && copyData[i].id_tess == $("#lstVerificacaoTess").val() && copyData[i].id_obrigatorio == $("#lstObrigatorio").val() && copyData[i].nome.trim().toUpperCase() == $("#idDescricaoPergunta").val().trim().toUpperCase()) {
+
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+
+
+        //if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() != "0" && $("#lstObrigatorio").val() != "0" && $("#idDescricaoPergunta").val() != "" && $("#lstTipoResposta").val() != "0" && $("#lstStatus").val() == "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val() && copyData[i].id_tess == $("#lstVerificacaoTess").val() && copyData[i].id_obrigatorio == $("#lstObrigatorio").val() && copyData[i].nome.trim().toUpperCase() == $("#idDescricaoPergunta").val().trim().toUpperCase() && copyData[i].id_tipoResposta == $("#lstTipoResposta").val()) {
+
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+
+
+        //if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() != "0" && $("#lstObrigatorio").val() != "0" && $("#idDescricaoPergunta").val() != "" && $("#lstTipoResposta").val() != "0" && $("#lstStatus").val() != "0") {
+        //    for (var i = 0; i < copyData.length; i++) {
+        //        if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val() && copyData[i].id_tess == $("#lstVerificacaoTess").val() && copyData[i].id_obrigatorio == $("#lstObrigatorio").val() && copyData[i].nome.trim().toUpperCase() == $("#idDescricaoPergunta").val().trim().toUpperCase() && copyData[i].id_tipoResposta == $("#lstTipoResposta").val() && copyData[i].status == $("#lstStatus").val()) {
+
+        //            ObjetoConsulta(copyData, i, cont);
+        //            cont++;
+        //        }
+        //    }
+        //    if (dadosRetorno != null) {
+        //        CarregaGrid(dadosRetorno, 1);
+        //        return;
+        //    }
+        //}
+
+    }
+
+    function populaCampos() {
+        if ($("#lstDepartamento").val() != "0") {
+            dadosCadastro = "id_departamento" + '":"' + $("#lstDepartamento").val();
+        }
+       
+        if ($("#lstMaquina").val() != "0") {
+            dadosCadastro += '","' + "id_maquina" + '":"' + $("#lstMaquina").val();
         }
 
-        if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() == "0" && $("#lstFormulario").val() == "0" && $("#lstVerificacaoTess").val() == "0" && $("#lstObrigatorio").val() == "0" && $("#idDescricaoPergunta").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val()) {
-
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
+        if ($("#llstParteMaquina").val() != "0") {
+            dadosCadastro += '","' + "id_parteMaquina" + '":"' + $("#llstParteMaquina").val();
         }
 
-        if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() == "0" && $("#lstVerificacaoTess").val() == "0" && $("#lstObrigatorio").val() == "0" && $("#idDescricaoPergunta").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val()) {
-
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
+        if ($("#lstFormulario").val() != "0") {
+            dadosCadastro += '","' + "id_formulario" + '":"' + $("#lstFormulario").val();
         }
 
-        if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() == "0" && $("#lstObrigatorio").val() == "0" && $("#idDescricaoPergunta").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val()) {
-
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
+        if ($("#lstVerificacaoTess").val() != "0") {
+            dadosCadastro += '","' + "id_tess" + '":"' + $("#lstVerificacaoTess").val();
         }
 
-        if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() != "0" && $("#lstObrigatorio").val() == "0" && $("#idDescricaoPergunta").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val() && copyData[i].id_tess == $("#lstVerificacaoTess").val()) {
-
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
+        if ($("#lstObrigatorio").val() != "0") {
+            dadosCadastro += '","' + "id_obrigatorio" + '":"' + $("#lstObrigatorio").val();
         }
 
-        if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() != "0" && $("#lstObrigatorio").val() != "0" && $("#idDescricaoPergunta").val() == "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val() && copyData[i].id_tess == $("#lstVerificacaoTess").val() && copyData[i].id_obrigatorio == $("#lstObrigatorio").val()) {
-
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
+        if ($("#idDescricaoPergunta").val() != "") {
+            dadosCadastro += '","' + "nome" + '":"' + $("#idDescricaoPergunta").val();
         }
 
-        if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() != "0" && $("#lstObrigatorio").val() != "0" && $("#idDescricaoPergunta").val() != "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val() && copyData[i].id_tess == $("#lstVerificacaoTess").val() && copyData[i].id_obrigatorio == $("#lstObrigatorio").val() && copyData[i].nome.trim().toUpperCase() == $("#idDescricaoPergunta").val().trim().toUpperCase()) {
-
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
+        if ($("#lstTipoResposta").val() != "") {
+            dadosCadastro += '","' + "id_tipoResposta" + '":"' + $("#lstTipoResposta").val();
         }
 
-        if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() != "0" && $("#lstObrigatorio").val() != "0" && $("#idDescricaoPergunta").val() != "" && $("#lstTipoResposta").val() == "0" && $("#lstStatus").val() == "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val() && copyData[i].id_tess == $("#lstVerificacaoTess").val() && copyData[i].id_obrigatorio == $("#lstObrigatorio").val() && copyData[i].nome.trim().toUpperCase() == $("#idDescricaoPergunta").val().trim().toUpperCase()) {
-
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
+        if ($("#lstStatus").val() != "0") {
+            dadosCadastro += '","' + "status" + '":"' + caracterSpecial($("#lstStatus").val());
         }
 
-
-        if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() != "0" && $("#lstObrigatorio").val() != "0" && $("#idDescricaoPergunta").val() != "" && $("#lstTipoResposta").val() != "0" && $("#lstStatus").val() == "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val() && copyData[i].id_tess == $("#lstVerificacaoTess").val() && copyData[i].id_obrigatorio == $("#lstObrigatorio").val() && copyData[i].nome.trim().toUpperCase() == $("#idDescricaoPergunta").val().trim().toUpperCase() && copyData[i].id_tipoResposta == $("#lstTipoResposta").val()) {
-
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
-        }
-
-
-        if ($("#lstDepartamento").val() != "0" && $("#lstMaquina").val() != "0" && $("#llstParteMaquina").val() != "0" && $("#lstFormulario").val() != "0" && $("#lstVerificacaoTess").val() != "0" && $("#lstObrigatorio").val() != "0" && $("#idDescricaoPergunta").val() != "" && $("#lstTipoResposta").val() != "0" && $("#lstStatus").val() != "0") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].id_departamento == $("#lstDepartamento").val() && copyData[i].id_maquina == $("#lstMaquina").val() && copyData[i].id_parteMaquina == $("#llstParteMaquina").val() && copyData[i].id_formulario == $("#lstFormulario").val() && copyData[i].id_tess == $("#lstVerificacaoTess").val() && copyData[i].id_obrigatorio == $("#lstObrigatorio").val() && copyData[i].nome.trim().toUpperCase() == $("#idDescricaoPergunta").val().trim().toUpperCase() && copyData[i].id_tipoResposta == $("#lstTipoResposta").val() && copyData[i].status == $("#lstStatus").val()) {
-
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno, 1);
-                return;
-            }
-        }
-
+        return true;
     }
 
     function ObjetoConsulta(obj, i, cont) {

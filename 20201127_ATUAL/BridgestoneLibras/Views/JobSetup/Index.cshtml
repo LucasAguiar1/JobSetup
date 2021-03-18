@@ -458,7 +458,7 @@
                     }
                     if (listIdsPerguntas[i].id_tipoResposta == 3) {
 
-                        if (listIdsPerguntas[i].valor == "") {
+                        if (listIdsPerguntas[i].valor == "" || listIdsPerguntas[i].valor == null) {
                             //return false;
                             cont++;
                         }
@@ -466,7 +466,7 @@
                     }
                     if (listIdsPerguntas[i].id_tipoResposta == 4) {
 
-                        if (listIdsPerguntas[i].valor == "") {
+                        if (listIdsPerguntas[i].valor == "" || listIdsPerguntas[i].valor == null) {
                             //return false;
                             cont++;
                         }
@@ -487,7 +487,7 @@
 
                                 if (listIdsPerguntas[i].Filho[r].id_tipoResposta == 3) {
 
-                                    if (listIdsPerguntas[i].Filho[r].id_obrigatorio == 1 && listIdsPerguntas[i].Filho[r].valor == "") {
+                                    if (listIdsPerguntas[i].Filho[r].id_obrigatorio == 1 && listIdsPerguntas[i].Filho[r].valor == "" ) {
                                         //return false;
                                         cont++;
                                     }
