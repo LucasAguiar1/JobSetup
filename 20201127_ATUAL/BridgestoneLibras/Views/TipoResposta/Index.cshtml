@@ -93,7 +93,6 @@
         ConsultarGrid();
         $('[data-toggle="tooltip"]').tooltip();
 
-
     })();
 
 
@@ -151,7 +150,7 @@
             }
         });
 
-
+        
     }
 
     function ComboStatus() {
@@ -199,50 +198,37 @@
 
 
     function Pesquisar() {
-        if (!validarPesquisa()) {
+
+        if (populaCampos()) {
+            eval('var myData = {"' + dadosCadastro + '"}');
+
+            $.ajax({
+                url: "Pesquisar/MaquinaParte",
+                data: JSON.stringify(myData),
+                type: 'POST',
+                traditional: true,
+                contentType: 'application/json',
+                success: function (data) {
+                    dadosCadastro = "";
+                    CarregaGrid(data);
+                    //ModalAlert(data.msn);
+                }
+            });
+        }
+    }
+
+    function populaCampos() {
+        if ($("#iddescricao").val() == "") {
+            ModalAlert("Por favor, informe a Descrição.");
             return false;
         }
+        dadosCadastro = "nome" + '":"' + $("#iddescricao").val();
 
-        var cont =0 ; 
-        dadosRetorno = new Array();
-
-        if ( $("#lstTipoResposta").val() != "0" && $("#iddescricao").val() == "") {
-            for (var i = 0; i < copyData.length; i++) {
-                ObjetoConsulta(copyData, i, cont);
-                cont++;
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno);
-                return;
-            }
+        if ($("#lstTipoResposta").val() != "0") {
+            dadosCadastro += '","' + "id_TipoResposta" + '":"' + $("#lstTipoResposta").val();
         }
 
-        if ( $("#lstTipoResposta").val() == "0" && $("#iddescricao").val()  != "" ) {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].nome.trim().toUpperCase() == $("#iddescricao").val().trim().toUpperCase()) {
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno);
-                return;
-            }
-        }
-
-
-        if ($("#lstTipoResposta").val() != "0" && $("#iddescricao").val() != "") {
-            for (var i = 0; i < copyData.length; i++) {
-                if (copyData[i].nome.trim().toUpperCase() == $("#iddescricao").val().trim().toUpperCase() && copyData[i].id_TipoResposta == $("#lstTipoResposta").val()) {
-                    ObjetoConsulta(copyData, i, cont);
-                    cont++;
-                }
-            }
-            if (dadosRetorno != null) {
-                CarregaGrid(dadosRetorno);
-                return;
-            }
-        }
+        return true;
     }
 
 
@@ -411,8 +397,8 @@
     }
 
     function Limpar() {
-        $("#lstStatus").val(0);
-        $("#lstTipoResposta").val(0);
+        $("#lstStatus").val(1);
+        $("#lstTipoResposta").val(1);
         $("#iddescricao").val("");
         $("#lstTipoResposta").prop('disabled', false);
         $("#conteudo").empty();

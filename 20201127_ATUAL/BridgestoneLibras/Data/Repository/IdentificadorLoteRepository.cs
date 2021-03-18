@@ -80,6 +80,33 @@ namespace LHH.Data.Repository
             }
         }
 
+        public TB_IDENTIFICADORLOTE AtualizarLotePCS(TB_IDENTIFICADORLOTE identificacaoLote)
+        {
+            try
+            {
+                TB_IDENTIFICADORLOTE tb_identificador = new TB_IDENTIFICADORLOTE();
+                using (var command = Context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = "sp_atualiza_identificador_lote";
+
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.Add(new SqlParameter("@idmaquina", identificacaoLote.id_maquina));
+                    command.Parameters.Add(new SqlParameter("@idPreenchimento", identificacaoLote.idPreenchimento));
+                    
+
+                    Context.Database.OpenConnection();
+                    command.ExecuteScalar();
+                }
+
+                return tb_identificador;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
         public List<TB_IDENTIFICADORLOTE> ConsultarIndentificador(TB_IDENTIFICADORLOTE identificacaoLote)
         {
             try

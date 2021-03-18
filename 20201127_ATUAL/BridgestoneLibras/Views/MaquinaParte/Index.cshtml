@@ -193,13 +193,13 @@
     }
 
     function populaCampos() {
-        if ($("#lstDepartamento").val() == "") {
+        if ($("#lstDepartamento").val() == "0") {
             ModalAlert("Por favor, selecione o Departamento.");
             return false;
         }
         dadosCadastro = "id_departamento" + '":"' + $("#lstDepartamento").val();
 
-        if ($("#lstMaquina").val() != "") {
+        if ($("#lstMaquina").val() != "0") {
             dadosCadastro += '","' + "id_maquina" + '":"' + $("#lstMaquina").val();
         }
 

@@ -56,7 +56,7 @@ using BridgestoneLibras.Models;
             WriteLiteral("\r\n\r\n<!DOCTYPE html>\r\n<script type=\"text/javascript\">\r\n    window.history.forward();\r\n    function loadNoBack() {\r\n        window.history.forward();\r\n    }\r\n</script>\r\n<html>\r\n");
             EndContext();
             BeginContext(175, 46, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "8199a14cc9ec4165ad08f92fd6bb9983", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f86e3b28b7f14e75953373c6925191d8", async() => {
                 BeginContext(181, 33, true);
                 WriteLiteral("\r\n    <title>Formulário</title>\r\n");
                 EndContext();
@@ -76,7 +76,7 @@ using BridgestoneLibras.Models;
             WriteLiteral("\r\n");
             EndContext();
             BeginContext(223, 4898, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "8545dcba173e47118e3ec70eb79d9fa8", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "dc1c06c55abb4176b4ec3928dcee91a4", async() => {
                 BeginContext(300, 4460, true);
                 WriteLiteral(@"
     <ul class=""breadcrumb"" style=""color:red"">

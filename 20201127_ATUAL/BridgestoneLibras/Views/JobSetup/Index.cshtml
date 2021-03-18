@@ -347,7 +347,7 @@
                     html += "<div class='row text-center' style='margin-top:20px;'>";
                     html += "<div class='col-lg-12'>";
                     html += "<h2><label >" + dados[i].nomeFormulario + "</label></h2>";
-                    html += "<h4><label id='identificadorLote'> Lote PCS: " + dados[i].identificadorLote + "</label></h4>";
+                    html += "<h4><label id='identificadorLote'> Lote PCS: " + dados[i].identificadorLote +  "</label>     <button type='button' style='color:red' class='btn btn-default' onclick='AtualizarPCS();' >Atualizar PCS</button></h4>";
                     html += "</div>";
                     html += "</div>";
                 }
@@ -390,6 +390,26 @@
             $("#formulario").append(html);
             DesabilitaCampos();
             PopulaCampos();
+        }
+
+
+        function AtualizarPCS() {
+
+            $.ajax({
+                url: 'AtualizarPCS/JobSetup',
+                type: 'POST',
+                traditional: true,
+                data: JSON.stringify(),
+                contentType: 'application/json',
+                success: function (response) {
+                                        
+                    var resposta = '';
+                    $("#identificadorLote").empty();
+                    resposta = "Lote PCS: " + response.vc_identificador_lote1;
+                    $("#identificadorLote").append(resposta);
+
+                }
+            });
         }
 
         function Salvar() {

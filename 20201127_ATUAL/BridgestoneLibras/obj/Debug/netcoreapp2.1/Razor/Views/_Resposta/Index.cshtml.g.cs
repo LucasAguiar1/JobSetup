@@ -54,7 +54,7 @@ using BridgestoneLibras.Models;
             WriteLiteral("<!DOCTYPE html>\r\n<html>\r\n");
             EndContext();
             BeginContext(25, 59, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "edcd2837df6f4dad8ab597454513738d", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "ea60645806134860bee88a594b49a5f3", async() => {
                 BeginContext(31, 46, true);
                 WriteLiteral("\r\n    <title>Departamento sdafasfsfa</title>\r\n");
                 EndContext();
@@ -74,7 +74,7 @@ using BridgestoneLibras.Models;
             WriteLiteral("\r\n");
             EndContext();
             BeginContext(86, 3115, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "ba9358e0b8474a338e8971dd24f79731", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4cea5c58d54b47fca0110b4f1201e412", async() => {
                 BeginContext(92, 3102, true);
                 WriteLiteral(@"
     <ul class=""breadcrumb"" style=""color:red"">

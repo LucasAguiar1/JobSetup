@@ -57,6 +57,18 @@ namespace LHH.Controllers
             return Json(repDescricao.Consultar(descricao));
         }
 
+        public ActionResult Pesquisar([FromBody]  TB_DescricaoMultiplaEscolha myData)
+        {
+            List<TB_DescricaoMultiplaEscolha> listDescMulEscolha = new List<TB_DescricaoMultiplaEscolha>();
+            DescricaoMultiplaEscolhaRepository repDescricao = new DescricaoMultiplaEscolhaRepository(_db);
+            TB_DescricaoMultiplaEscolha dp = new TB_DescricaoMultiplaEscolha();
+            listDescMulEscolha = repDescricao.Consultar(dp).ToList();
+
+            listDescMulEscolha = listDescMulEscolha.Where(x => x.id_TipoResposta == myData.id_TipoResposta && x.nome.ToUpper().Contains(myData.nome.ToUpper().Trim())).ToList();
+            
+            return Json(listDescMulEscolha);
+        }
+
         public ActionResult Status(TB_STATUS tb_status)
         {
             StatusRepository RepStatus = new StatusRepository(_db);
@@ -98,7 +110,9 @@ namespace LHH.Controllers
                 listTipoResposta = RepTipo.Consultar(tb_status).Where(x => x.id == 1).ToList();
             }
 
-            return Json(RepTipo.Combo(listTipoResposta, "Selecione"));
+
+            return Json(RepTipo.Combo(listTipoResposta, "Selecione").Where(x=> x.Value == "1"));
+
         }
     }
 }

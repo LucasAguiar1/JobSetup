@@ -68,7 +68,7 @@ namespace LHH.Controllers
 
             if (myData.id_departamento != 0 && myData.id_maquina != 0 && myData.id_parteMaquina != 0 && myData.nome == null && myData.status == 0)
             {
-                listFomrulario = listFomrulario.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina).ToList();
+                listFomrulario = listFomrulario.Where(x => x.id_departamento == myData.id_departamento && x.id_maquina == myData.id_maquina  && x.id_parteMaquina == myData.id_parteMaquina).ToList();
                 consulta = true;
             }
 

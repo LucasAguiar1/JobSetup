@@ -34,7 +34,10 @@ namespace BridgestoneLibras.Controllers
         List<Status> listaStatus = new List<Status>();
 
         static string vc_identificador_lote1 = "0"; //para pega o lote
-        static int idPreenchimento = 0; 
+        static int idPreenchimento = 0;
+        static int IdPreenchimentoPcs = 0;
+        static string id_maquinaPCS = "0";
+
 
         //the framework handles this
         public JobSetupController(ApplicationDbSpecContext db,
@@ -106,8 +109,6 @@ namespace BridgestoneLibras.Controllers
 
             return Json(RepFormulario.OrdemPriodidade(m).Where(x => x.status == 1).ToList());
         }
-
-
         [HttpPost]
         public ActionResult RespostaPergunta([FromBody]List<TB_RespPai> tb_resPai)
         {
@@ -162,8 +163,6 @@ namespace BridgestoneLibras.Controllers
                         }
                     }
                 }
-
-                
             }
             else
             {
@@ -189,7 +188,7 @@ namespace BridgestoneLibras.Controllers
                                 }
                             }
 
-                            
+
                         }
                     }
                 }
@@ -197,20 +196,21 @@ namespace BridgestoneLibras.Controllers
             //Cadatrar o lote na  tabela junto com o o id do preenchimneto. 
             IdentificadorLoteRepository identificador = new IdentificadorLoteRepository(_db);
 
-            p.idPreenchimento = idPreenchimento; 
-            
-            if (CadastrarIdentificadoLoteXidPreenchimento(p).Count.Equals(0)){
+            p.idPreenchimento = idPreenchimento;
+
+            if (CadastrarIdentificadoLoteXidPreenchimento(p).Count.Equals(0))
+            {
                 TB_IDENTIFICADORLOTE iden = new TB_IDENTIFICADORLOTE();
                 iden.idPreenchimento = idPreenchimento;
                 iden.identificadoLote = vc_identificador_lote1;
                 CadastrarIdentificadoLote(iden);
-                
+
             }
             //Limpa as duas variaveis staticas. 
             idPreenchimento = 0;
             vc_identificador_lote1 = "0";
-            
-
+            id_maquinaPCS = "0";
+            IdPreenchimentoPcs = 0; 
 
             return tb_resPai;
         }
@@ -299,6 +299,20 @@ namespace BridgestoneLibras.Controllers
         }
 
 
+        public ActionResult AtualizarPCS()
+        {
+            var ret = IdentificadorLote(Convert.ToInt32(id_maquinaPCS));
+
+            TB_IDENTIFICADORLOTE identificador = new TB_IDENTIFICADORLOTE();
+            identificador.idPreenchimento = IdPreenchimentoPcs;
+            identificador.vc_identificador_lote1 = ret.vc_identificador_lote1;
+            identificador.id_maquina = Convert.ToInt32(id_maquinaPCS); 
+            IdentificadorLoteRepository RepositoryInd = new IdentificadorLoteRepository(_db);
+            RepositoryInd.AtualizarLotePCS(identificador);
+
+            return Json(ret);
+        }
+
         public TB_IDENTIFICADORLOTE IdentificadorLote(int id_maquinaPCS)
         {
             IdentificadorLoteRepository RepositoryInd = new IdentificadorLoteRepository(_db);
@@ -315,14 +329,14 @@ namespace BridgestoneLibras.Controllers
                 if (identificador.vc_identificador_lote1 != null)
                 {
                     perguntas.First().identificadorLote = identificador.vc_identificador_lote1;
-                         vc_identificador_lote1 = identificador.vc_identificador_lote1;
+                    vc_identificador_lote1 = identificador.vc_identificador_lote1;
                     idPreenchimento = identificador.idPreenchimento;
                 }
                 else
                 {
                     perguntas.First().identificadorLote = "0";
                     vc_identificador_lote1 = "0";
-                    idPreenchimento = 0; 
+                    idPreenchimento = 0;
                 }
             }
             else
@@ -371,6 +385,7 @@ namespace BridgestoneLibras.Controllers
             {
 
                 idPreenchimento = respostaPai.FirstOrDefault().idPreenchimento;
+                IdPreenchimentoPcs = respostaPai.FirstOrDefault().idPreenchimento;
 
                 foreach (var item in perguntas)
                 {
@@ -459,6 +474,8 @@ namespace BridgestoneLibras.Controllers
             {
                 perguntas = perguntas.Where(x => x.chave != 0).ToList();
             }
+
+            
             return perguntas;
         }
 
@@ -473,6 +490,8 @@ namespace BridgestoneLibras.Controllers
             if (perguntas.Count > 0)
             {
                 IdentificadorLote(ref perguntas);
+                //Adicionar uma variavel global aqui 
+                id_maquinaPCS = perguntas.FirstOrDefault().i_Pk_Maquina;
             }
             //Alternativas
             try
@@ -533,7 +552,7 @@ namespace BridgestoneLibras.Controllers
 
                 throw EX;
             }
-            
+
 
         }
 
@@ -550,6 +569,8 @@ namespace BridgestoneLibras.Controllers
             if (perguntas.Count > 0)
             {
                 IdentificadorLote(ref perguntas);
+                id_maquinaPCS = perguntas.FirstOrDefault().i_Pk_Maquina;
+
             }
 
 
@@ -733,7 +754,7 @@ namespace BridgestoneLibras.Controllers
         public ActionResult ConsultarListaUsuarios(int idDepartamento)
         {
             NotificacaoRepository notificacaoRepos = new NotificacaoRepository(_db);
-            
+
             DepartamentoRepository dep = new DepartamentoRepository(_db);
             TB_DEPARTAMENTO departamento = new TB_DEPARTAMENTO();
 
